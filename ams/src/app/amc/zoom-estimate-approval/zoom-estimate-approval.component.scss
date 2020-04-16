@@ -1,0 +1,12 @@
+.css-ellipsis {
+    width: 100px;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    &:hover {
+        overflow: visible;
+        height: 50px;
+        white-space: pre-wrap
+    }
+}

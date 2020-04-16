@@ -1,0 +1,30 @@
+<div class="dialog">
+    <h1 mat-dialog-title>Dispute Details</h1>
+    <div mat-dialog-content>
+	    <table class="data-table fixed">
+			<thead>
+				<tr>				
+					<th class="align-left">Claim No.</th>
+					<th class="align-left">Brand Name</th>
+					<th class="align-left">Dispute Reason</th>
+					<th class="align-left">Disputed By</th>
+					<th class="align-left">Comments</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr >
+					<td class="align-left">{{response?.claimNo}}</td>
+          <td class="align-left">{{response?.brand}}<td class="align-left">{{disputeType}}</td>
+					<td class="align-left">{{disputedBy}}</td>
+					
+					<td class="align-left">{{comments}}</td>
+				</tr>
+				
+			</tbody>
+        </table>
+     
+    </div>
+    <div mat-dialog-actions>
+      <button mat-raised-button (click)="onNoClick()">Close</button>
+    </div>
+  </div>

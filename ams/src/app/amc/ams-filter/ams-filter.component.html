@@ -1,0 +1,611 @@
+<mat-card class="data-card">
+    <mat-card-header class="with-icon">
+        <div class="handle-drag">
+            <div class="handle">Drag</div>
+            <i class="material-icons">apps</i>
+        </div>
+
+        <mat-select placeholder="Select ARC Partner" [(value)]="arcId" [(ngModel)]="ArcName">
+            <mat-option *ngFor="let item of arcResponse" [value]="item.arcId">{{item.name}}</mat-option>
+
+
+        </mat-select>
+        <mat-select placeholder="Filter By" [(value)]="filterCase" [(ngModel)]='filterValue' (change)="showTable=false"
+            required>
+            <mat-option *ngFor="let item of filterResponse" [value]="item">{{item}}</mat-option>
+
+
+        </mat-select>
+        <div class="filter" *ngIf='showDateTime'>
+            <mat-form-field fxFlex>
+                <input matInput [matDatepicker]="fromDatePicker" [max]="toDate" (click)="fromDatePicker.open()"
+                    [(ngModel)]="fromDate" placeholder="From Date">
+                <mat-datepicker-toggle matSuffix [for]="fromDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker touchUi="true" #fromDatePicker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+                <input matInput [matDatepicker]="toDatePicker1" [min]="fromDate" (click)="toDatePicker1.open()"
+                    [(ngModel)]="toDate" placeholder="To Date">
+                <mat-datepicker-toggle matSuffix [for]="toDatePicker1"></mat-datepicker-toggle>
+                <mat-datepicker touchUi="true" #toDatePicker1></mat-datepicker>
+            </mat-form-field>
+
+            <button mat-raised-button color="accent" [disabled]="!ArcName" (click)="submitClick(fromDate,toDate,ArcName,filterValue)"
+                style="height: 40px;">Submit</button>
+        </div>
+        <div class="filter" *ngIf='!showDateTime'>
+            <mat-form-field fxFlex style="width: 260px;">
+                <input matInput placeholder="Search" *ngIf='showIMEI' />
+                <input matInput placeholder="Search" *ngIf='showName' />
+                <input matInput placeholder="Search" *ngIf='showClaim' />
+                <input matInput placeholder="Search" *ngIf='showContactNumber' />
+            </mat-form-field>
+            <button mat-raised-button color="accent" (click)="filter()" style="height: 40px;">Search</button>
+        </div>
+        <div class="header-icon-btn">
+            <button mat-icon-button (click)="toggle()">
+                <i class="material-icons">{{isToggle ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
+            </button>
+        </div>
+    </mat-card-header>
+    <mat-card-content class="filter-data" *ngIf="isToggle" [@isToggle]="isToggle">
+        <table matSort datatable [dtOptions]="dtOptions" class="data-table fixed" *ngIf="filterValue == 'Device Not Received' && showTable">
+            <thead>
+                <tr>
+                    <th class="align-left">Claim Id
+                        <br> Claim Date</th>
+                    <th class="align-left">Repair Order No
+                        <br> Repair Order Date</th>
+                    <th class="align-left">ARC Name</th>
+                    <th class="align-left">Device Name
+                        <br> IMEI No.</th>
+                    <th class="align-left">AWB Number</th>
+                    <th class="align-left" mat-sort-header="eta">Logistic Provider</th>
+                    <th class="align-left">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of response">
+                    <td class="align-left">{{item.claimId}}
+                        <br>{{item.claimDate | dateFormatWt}}</td>
+                    <td class="align-left">{{item.repairOrderNo}}
+                        <br>{{item.repairOrderDate  | dateFormatWt }}</td>
+                    <td>{{item.ARCName}}</td>
+                    <td class="align-left">{{item.deviceName}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)()">{{item.imeiNumber}}</button>
+                    </td>
+                    <!-- <td class="align-left"><a (click)="trackAWB(item)" style="cursor: pointer;">{{item.awbNo}}</a></td> -->
+                    <td class="align-left" *ngIf="item.courierName !='captive' && item.courierName !='Direct Pick Up'">
+                        <a style="cursor: pointer;" (click)="trackAWB(item)">{{item?.awbNo}}</a>
+                    </td>
+                    <td class="align-left" *ngIf="item.courierName=='captive' || item.courierName=='Direct Pick Up'">{{item?.awbNo}} </td>
+                    <td class="align-left">{{item.courierName}}</td>
+                    <td class="align-left action">
+                        <button mat-raised-button color="accent">Note</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table matSort datatable [dtOptions]="dtOptions" class="data-table fixed" *ngIf="filterValue == 'Device Delivered' && showTable">
+            <thead>
+                <tr>
+                    <th class="align-left">Claim Id
+                        <br> Claim Date</th>
+                    <th class="align-left">Repair Order No
+                        <br> Repair Order Date</th>
+                    <th class="align-left">ARC Name</th>
+                    <th class="align-left">Device Name
+                        <br> IMEI No.</th>
+                    <th class="align-left">AWB Number</th>
+                    <th class="align-left">Logistic Provider</th>
+                    <th class="align-left">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of response">
+                    <td class="align-left">{{item.claimNo}}
+                        <br>{{item.claimDate | dateFormatWt}}</td>
+                    <td class="align-left">{{item.orderId}}
+                        <br>{{item.orderedDate | dateFormatWt}}</td>
+                    <td>{{item.arcName}}</td>
+                    <td class="align-left">{{item.brand}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)()">{{item.imeiNo}}</button>
+                    </td>
+                    <!-- <td class="align-left"><a (click)="trackAWB(item)">{{item.awbNo}}</a></td> -->
+                    <td class="align-left" *ngIf="item.courierName !='captive' && item.courierName !='Direct Pick Up'">
+                        <a style="cursor: pointer;" (click)="trackAWB(item)">{{item?.awbNo}}</a>
+                    </td>
+                    <td class="align-left" *ngIf="item.courierName=='captive' || item.courierName=='Direct Pick Up'">{{item?.awbNo}} </td>
+                    <td class="align-left">{{item.courierName}}</td>
+                    <td>
+                        <button mat-icon-button title="Get Quotation" (click)="downloadPDF(item.orderId)" color="accent"
+                            class="align-right download-btn" style="position: relative;">
+                            <i class="fas fa-download"></i>
+                        </button>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <table matSort datatable [dtOptions]="dtOptions" class="data-table fixed" *ngIf="filterValue == 'Device Dispatched' && showTable">
+            <thead>
+                <tr>
+                    <th class="align-left">Claim Id</th>
+                    <th class="align-left">Repair Order No</th>
+                    <th class="align-left">Customer Name</th>
+                    <th class="align-left">Courier Name</th>
+                    <th class="align-left">AWB No.</th>
+                    <th class="align-left">Dispatched Date</th>
+                    <th class="align-left" mat-sort-header="eta">Delivery Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of response">
+                    <td class="align-left">{{item.claimNo}}
+                    <td class="align-left">{{item.orderId}}
+                    <td>{{item.policyHolderName}}</td>
+                    <td class="align-left">{{item.courierName}}</td>
+                    <!-- <td class="align-left"><a (click)="trackAWB(item)" style="cursor: pointer;">{{item.awbNo}}</a></td> -->
+                    <td class="align-left" *ngIf="item.courierName !='captive' && item.courierName !='Direct Pick Up'">
+                        <a style="cursor: pointer;" (click)="trackAWB(item)">{{item?.awbNo}}</a>
+                    </td>
+                    <td class="align-left" *ngIf="item.courierName=='captive' || item.courierName=='Direct Pick Up'">{{item?.awbNo}} </td>
+                    <td class="align-left">{{item.eta | dateFormatWt}}</td>
+                    <td class="align-left">{{item.orderState}}</td>
+                    <td>
+                        <button mat-icon-button title="Get Quotation" (click)="downloadPDF(item.orderId)" color="accent"
+                            class="align-right download-btn" style="position: relative;">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table matSort datatable [dtOptions]="dtOptions" class="data-table fixed" *ngIf="filterValue == 'Disputed' && showTable">
+            <thead>
+                <tr>
+                    <th class="align-left">Claim Id
+                        <br> Claim Date</th>
+                    <th class="align-left">Repair Order No
+                        <br> Repair Order Date</th>
+                    <th class="align-left">ARC Name</th>
+                    <th class="align-left">Device Name
+                        <br> IMEI No.</th>
+                    <th class="align-left">Dispute Type</th>
+                    <th class="align-left">Comments</th>
+                    <th class="align-left" mat-sort-header="eta">Disputed Date/Time</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of response">
+                    <td class="align-left">{{item.claimNo}}
+                        <br>{{item.claimDate  | dateFormatWt}}</td>
+                    <td class="align-left">{{item.orderId}}
+                        <br>{{item.orderedDate  | dateFormatWt}}</td>
+                    <td>{{item.arcName}}</td>
+                    <td class="align-left">{{item.brand}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)()">{{item.imeiNo}}</button>
+                    </td>
+                    <td class="align-left">{{item.disputeType}}</td>
+                    <td class="align-left">{{item.comments}}</td>
+                    <td class="align-left">{{item.disputeDate | dateFormatWt}}</td>
+
+                </tr>
+            </tbody>
+        </table>
+
+        <table matSort datatable [dtOptions]="dtOptions" class="data-table fixed" *ngIf="filterValue == 'Device in Transit' && showTable">
+            <thead>
+                <tr>
+                    <th class="align-left">Claim Id
+                        <br> Claim Date</th>
+                    <th class="align-left">Repair Order No
+                        <br> Repair Order Date</th>
+                    <th class="align-left">ARC Name</th>
+                    <th class="align-left">Device Name
+                        <br> IMEI No.</th>
+                    <th class="align-left">AWB No.</th>
+                    <th class="align-left" mat-sort-header="eta">Logistic Name</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of response">
+                    <td class="align-left">{{item.claimNo}}
+                        <br>{{item.claimDate | dateFormatWt}}</td>
+                    <td class="align-left">{{item.orderId}}
+                        <br>{{item.orderedDate | dateFormatWt}}</td>
+                    <td>{{item.arcName}}</td>
+                    <td class="align-left">{{item.brand}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)()">{{item.imeiNo}}</button>
+                    </td>
+                    <!-- <td class="align-left"><a (click)="trackAWB(item)" style="cursor: pointer;">{{item.awbNo}}</a></td> -->
+                    <td class="align-left" *ngIf="item.courierName !='captive' && item.courierName !='Direct Pick Up'">
+                        <a style="cursor: pointer;" (click)="trackAWB(item)">{{item?.awbNo}}</a>
+                    </td>
+                    <td class="align-left" *ngIf="item.courierName=='captive' || item.courierName=='Direct Pick Up'">{{item?.awbNo}} </td>
+                    <td class="align-left">{{item.courierName}}</td>
+                    <!-- <td class="align-left">{{item.comment}}</td>
+                        <td class="align-left action">
+                            <button mat-raised-button color="accent">Note</button>
+                        </td> -->
+                </tr>
+            </tbody>
+        </table>
+
+        <table matSort datatable [dtOptions]="dtOptions" class="data-table fixed" *ngIf="filterValue == 'Pending Estimation' && showTable">
+            <thead>
+                <tr>
+                    <th class="align-left">Claim Id
+                        <br> Claim Date</th>
+                    <th class="align-left">Repair Order No
+                        <br> Repair Order Date</th>
+                    <th class="align-left">ARC Name</th>
+                    <th class="align-left">Device Name
+                        <br> IMEI No.</th>
+                    <th class="align-left">Device Received date/Time</th>
+                    <th class="align-left" mat-sort-header="eta">Estimation Due Date</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of response">
+                    <td class="align-left">{{item.claimNo}}
+                        <br>{{item.claimDate | dateFormatWt }}</td>
+                    <td class="align-left">{{item.orderId}}
+                        <br>{{item.orderedDate | dateFormatWt}}</td>
+                    <td>{{item.arcName}}</td>
+                    <td class="align-left">{{item.brand}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)()">{{item.imeiNo}}</button>
+                    </td>
+                    <td class="align-left">{{item.receivedDateTime | dateFormatWt}}</td>
+                    <td class="align-left">{{item.estimationDueDate | dateFormatWt}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table matSort datatable [dtOptions]="dtOptions" class="data-table fixed" *ngIf="filterValue == 'Repair in Progress' && showTable">
+            <thead>
+                <tr>
+                    <th class="align-left">Claim Id
+                        <br> Claim Date</th>
+                    <th class="align-left">Repair Order No
+                        <br> Repair Order Date</th>
+                    <th class="align-left">ARC Name</th>
+                    <th class="align-left">Device Name
+                        <br> IMEI No.</th>
+                    <th class="align-left">Estimation Approved Date/Time</th>
+                    <th class="align-left">Repair Due Date</th>
+                    <th class="align-left">Estimated Approved Amount
+                    </th>
+                    <th class="align-left">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of response">
+                    <td class="align-left">{{item.claimNo}}
+                        <br>{{item.claimDate | dateFormatWt}}</td>
+                    <td class="align-left">{{item.orderId}}
+                        <br>{{item.orderedDate | dateFormatWt}}</td>
+                    <td>{{item.arcName}}</td>
+                    <td class="align-left">{{item.brand}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)()">{{item.imeiNo}}</button>
+                    </td>
+                    <td class="align-left">{{item.estimationApprovedDate | dateFormatWt}}</td>
+                    <td class="align-left">{{item.repairDueDate | dateFormatWt}}
+                        <i (click)="getDateHistory(item.orderId)" class="material-icons iconSize">
+                            info
+                        </i>
+                    </td>
+                    <td class="align-left">{{item.amount}}</td>
+                    <td>
+                        <button mat-icon-button title="Get Quotation" (click)="downloadPDF(item.orderId)" color="accent"
+                            class="align-right download-btn" style="position: relative;">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table matSort datatable [dtOptions]="dtOptions" class="data-table fixed" *ngIf="filterValue == 'Pending for Approval' && showTable">
+            <thead>
+                <tr>
+                    <th class="align-left">Claim Id
+                        <br> Claim Date</th>
+                    <th class="align-left">Repair Order No
+                        <br> Repair Order Date</th>
+                    <th class="align-left">ARC Name</th>
+                    <th class="align-left">Device Name
+                        <br> IMEI No.</th>
+                    <th class="align-left">Estimation Submission Date/Time</th>
+                    <th class="align-left">Estimation Due Date/Time</th>
+                    <th class="align-left">Estimated Approved Amount
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of response">
+                    <td class="align-left">{{item.claimNo}}
+                        <br>{{item.claimDate | dateFormatWt}}</td>
+                    <td class="align-left">{{item.orderId}}
+                        <br>{{item.orderedDate | dateFormatWt}}</td>
+                    <td>{{item.arcName}}</td>
+                    <td class="align-left">{{item.brand}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)()">{{item.imeiNo}}</button>
+                    </td>
+                    <td class="align-left">{{item.estimationSubmissionDate | dateFormatWt}}</td>
+                    <td class="align-left">{{item.estimationDueDate | dateFormatWt}}</td>
+                    <td class="align-left">{{item.totalAmt}}</td>
+
+
+                </tr>
+            </tbody>
+        </table>
+
+
+
+
+        <table matSort datatable [dtOptions]="dtOptions" class="data-table fixed" *ngIf="filterValue == 'Rejected to AMS' && showTable">
+            <thead>
+                <tr>
+                    <th class="align-left">Claim Id
+                        <br> Claim Date</th>
+                    <th class="align-left">Repair Order No
+                        <br> Repair Order Date</th>
+                    <th class="align-left">ARC Name</th>
+                    <th class="align-left">Device Name
+                        <br> IMEI No.</th>
+                    <th class="align-left">Rejected Date/Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of response">
+                    <td class="align-left">{{item.claimNo}}
+                        <br>{{item.claimDate | dateFormatWt}}</td>
+                    <td class="align-left">{{item.orderId}}
+                        <br>{{item.orderedDate | dateFormatWt}}</td>
+                    <td>{{item.arcName}}</td>
+                    <td class="align-left">{{item.brand}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)()">{{item.imeiNo}}</button>
+                    </td>
+                    <td class="align-left">{{item.lastUpdatedTime}}</td>
+
+                </tr>
+            </tbody>
+        </table>
+
+        <table matSort datatable [dtOptions]="dtOptions" class="data-table fixed" *ngIf="filterValue == 'Rejected to Customer' && showTable">
+            <thead>
+                <tr>
+                    <th class="align-left">Claim Id
+                        <br> Claim Date</th>
+                    <th class="align-left">Repair Order No
+                        <br> Repair Order Date</th>
+                    <th class="align-left">ARC Name</th>
+                    <th class="align-left">Device Name
+                        <br> IMEI No.</th>
+                    <th class="align-left">Rejected Date/Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of response">
+                    <td class="align-left">{{item.claimNo}}
+                        <br>{{item.claimDate | dateFormatWt}}</td>
+                    <td class="align-left">{{item.orderId}}
+                        <br>{{item.orderedDate | dateFormatWt}}</td>
+                    <td>{{item.arcName}}</td>
+                    <td class="align-left">{{item.brand}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)()">{{item.imeiNo}}</button>
+                    </td>
+                    <td class="align-left">{{item.lastUpdatedTime | dateFormatWt}}</td>
+
+                </tr>
+            </tbody>
+        </table>
+
+        <table matSort datatable [dtOptions]="dtOptions" class="data-table fixed" *ngIf="filterValue == 'Pending for Dispatch' && showTable">
+            <thead>
+                <tr>
+                    <th class="align-left">Claim Id
+                        <br> Claim Date</th>
+                    <th class="align-left">Repair Order No
+                        <br> Repair Order Date</th>
+                    <th class="align-left">ARC Name</th>
+                    <th class="align-left">Device Name
+                        <br> IMEI No.</th>
+                    <th class="align-left">Order Completion Date/Time</th>
+                    <th class="align-left">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of response">
+                    <td class="align-left">{{item.claimNo}}
+                        <br>{{item.claimDate | dateFormatWt}}</td>
+                    <td class="align-left">{{item.orderId}}
+                        <br>{{item.orderedDate | dateFormatWt}}</td>
+                    <td>{{item.arcName}}</td>
+                    <td class="align-left">{{item.brand}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)()">{{item.imeiNo}}</button>
+                    </td>
+                    <td class="align-left">{{ item.repairCompletionDate | dateFormatWt }}</td>
+                    <td class="align-left">
+                        <button mat-icon-button title="Get Quotation" (click)="downloadPDF(item.orderId)" color="accent"
+                            class="align-right download-btn" style="position: relative;">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table matSort datatable [dtOptions]="dtOptions" class="data-table fixed" *ngIf="filterValue == 'Search by IMEI' && showTable">
+            <thead>
+                <tr>
+                    <th class="align-left">Claim Id
+                        <br> Claim Date</th>
+                    <th class="align-left">Repair Order No
+                        <br> Repair Order Date</th>
+                    <th class="align-left">ARC Name</th>
+                    <th class="align-left">Device Name
+                        <br> IMEI No.</th>
+                    <th class="align-left">Dispatch Date/Time</th>
+                    <th class="align-left">courier</th>
+                    <th class="align-left">Comment</th>
+                    <th class="align-left">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of ROPendingDispatchData">
+                    <td class="align-left">{{item.claimId}}
+                        <br>{{item.claimDate | dateFormatWt}}</td>
+                    <td class="align-left">{{item.repairOrderNo}}
+                        <br>{{item.repairOrderDate | dateFormatWt}}</td>
+                    <td>{{item.ARCName}}</td>
+                    <td class="align-left">{{item.deviceName}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)()">{{item.imeiNumber}}</button>
+                    </td>
+                    <td class="align-left">{{ item.dispatchDateTime | dateFormatWt }}</td>
+                    <td class="align-left">{{ item.courierName }}</td>
+                    <td class="align-left">{{ item.comment }}</td>
+                    <td class="align-left action">
+                        <button mat-raised-button color="accent">Note</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table matSort datatable [dtOptions]="dtOptions" class="data-table fixed" *ngIf="filterValue == 'Search by Customer Contact Number' && showTable">
+            <thead>
+                <tr>
+                    <th class="align-left">Claim Id
+                        <br> Claim Date</th>
+                    <th class="align-left">Repair Order No
+                        <br> Repair Order Date</th>
+                    <th class="align-left">ARC Name</th>
+                    <th class="align-left">Device Name
+                        <br> IMEI No.</th>
+                    <th class="align-left">Dispatch Date/Time</th>
+                    <th class="align-left">courier</th>
+                    <th class="align-left">Comment</th>
+                    <th class="align-left">Action</th>
+                    <th class="align-left">Customer Contact Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of ROPendingDispatchData">
+                    <td class="align-left">{{item.claimId}}
+                        <br>{{item.claimDate | dateFormatWt}}</td>
+                    <td class="align-left">{{item.repairOrderNo}}
+                        <br>{{item.repairOrderDate | dateFormatWt}}</td>
+                    <td>{{item.ARCName}}</td>
+                    <td class="align-left">{{item.deviceName}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)()">{{item.imeiNumber}}</button>
+                    </td>
+                    <td class="align-left">{{ item.dispatchDateTime | dateFormatWt }}</td>
+                    <td class="align-left">{{ item.courierName }}</td>
+                    <td class="align-left">{{ item.comment }}</td>
+                    <td class="align-left">{{ item.contactNumber }}</td>
+                    <td class="align-left action">
+                        <button mat-raised-button color="accent">Note</button>
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+
+        <table matSort datatable [dtOptions]="dtOptions" class="data-table fixed" *ngIf="filterValue == 'Search by Name' && showTable">
+            <thead>
+                <tr>
+                    <th class="align-left">Claim Id
+                        <br> Claim Date</th>
+                    <th class="align-left">Repair Order No
+                        <br> Repair Order Date</th>
+                    <th class="align-left">ARC Name</th>
+                    <th class="align-left">Device Name
+                        <br> IMEI No.</th>
+                    <th class="align-left">Dispatch Date/Time</th>
+                    <th class="align-left">courier</th>
+                    <th class="align-left">Comment</th>
+                    <th class="align-left">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of ROPendingDispatchData">
+                    <td class="align-left">{{item.claimId}}
+                        <br>{{item.claimDate | dateFormatWt}}</td>
+                    <td class="align-left">{{item.repairOrderNo}}
+                        <br>{{item.repairOrderDate | dateFormatWt}}</td>
+                    <td>{{item.ARCName}}</td>
+                    <td class="align-left">{{item.deviceName}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)()">{{item.imeiNumber}}</button>
+                    </td>
+                    <td class="align-left">{{ item.dispatchDateTime | dateFormatWt }}</td>
+                    <td class="align-left">{{ item.courierName }}</td>
+                    <td class="align-left">{{ item.comment }}</td>
+                    <td class="align-left action">
+                        <button mat-raised-button color="accent">Note</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table matSort datatable [dtOptions]="dtOptions" class="data-table fixed" *ngIf="filterValue == 'Search by Claim number' && showTable">
+            <thead>
+                <tr>
+                    <th class="align-left">Claim Id
+                        <br> Claim Date</th>
+                    <th class="align-left">Repair Order No
+                        <br> Repair Order Date</th>
+                    <th class="align-left">ARC Name</th>
+                    <th class="align-left">Device Name
+                        <br> IMEI No.</th>
+                    <th class="align-left">Dispatch Date/Time</th>
+                    <th class="align-left">courier</th>
+                    <th class="align-left">Comment</th>
+                    <th class="align-left">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of ROPendingDispatchData">
+                    <td class="align-left">{{item.claimId}}
+                        <br>{{item.claimDate | dateFormatWt}}</td>
+                    <td class="align-left">{{item.repairOrderNo}}
+                        <br>{{item.repairOrderDate | dateFormatWt}}</td>
+                    <td>{{item.ARCName}}</td>
+                    <td class="align-left">{{item.deviceName}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)()">{{item.imeiNumber}}</button>
+                    </td>
+                    <td class="align-left">{{ item.dispatchDateTime  | dateFormatWt}}</td>
+                    <td class="align-left">{{ item.courierName }}</td>
+                    <td class="align-left">{{ item.comment }}</td>
+                    <td class="align-left action">
+                        <button mat-raised-button color="accent">Note</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </mat-card-content>
+</mat-card>

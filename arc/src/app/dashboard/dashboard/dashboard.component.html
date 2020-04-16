@@ -1,0 +1,31 @@
+<!--Header Component-->
+<app-header></app-header>
+<button class="drawer-menu" mat-icon-button (click)="drawer.toggle()" fxShow fxHide.xs="false" fxHide.lg="true" fxHide.xl="true">
+  <mat-icon aria-label="">{{drawer.opened ? 'keyboard_backspace' : 'menu'}}</mat-icon>
+</button>
+<mat-drawer-container>
+    <mat-drawer #drawer mode="push">
+        <!--Menu Component-->
+        <app-menu [dashboard]="dashboardItems" (change)="getDashboardItems($event,pckry)"></app-menu>
+    </mat-drawer>
+    <div fxLayout="row" fxLayoutGap="15px">
+        <div fxFlex="200px" fxHide fxShow.xs="false" fxShow.lg="true" fxShow.xl="true">
+            <!--Menu Component-->
+            <app-menu [dashboard]="dashboardItems" (change)="getDashboardItems($event,pckry)"></app-menu>
+        </div>
+        <div fxFlex>
+            <div class="container" id="myContainer">
+                <div class="dashboard-wrap">
+                    <div class="grid" *ngIf="dashboardItems">
+                        <app-device-in-transit class="grid-item" (deviceReceived)='deviceReceived($event)' [changeInDeviceTransit]="reloadDeviceTransit" [show]="dashboardItems.deviceInTransit" (changeExpansion)="changeExp($event,pckry)"></app-device-in-transit>
+                        <app-recieved-device class="grid-item" [show]="dashboardItems.recievedDevice"  [changeInPendingEstimation]="reloadPendingEstimation" (changeExpansion)="changeExp($event,pckry)"></app-recieved-device>
+                        <app-pending-for-approval class="grid-item" [show]="dashboardItems.pendingForApproval" [changeInPendingForApproval]="reloadPendingForApproval" (changeExpansion)="changeExp($event,pckry)"></app-pending-for-approval>
+                        <app-repair-in-progress class="grid-item" [show]="dashboardItems.repairInProgress" [changeInRepairInProgress]="reloadRepairInProgress" (changeExpansion)="changeExp($event,pckry)"></app-repair-in-progress>                        
+                        <app-pending-for-dispatch class="grid-item" [show]="dashboardItems.pendingForDispatch" [changeInPendingForDispatch]="reloadPendingForDispatch" (changeExpansion)="changeExp($event,pckry)"></app-pending-for-dispatch>
+                        <app-device-dispatched class="grid-item" [show]="dashboardItems.deviceDispatched" [changeInPendingForDispatch]="reloadDeviceDispatch" (changeExpansion)="changeExp($event,pckry)"></app-device-dispatched>               
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-drawer-container>

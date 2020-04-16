@@ -1,0 +1,30 @@
+<div class="dialog">
+  <h1 mat-dialog-title>Received</h1>
+  <div mat-dialog-content>
+		<table class="table-content">
+          <tr>
+            <th fxFlex>Received Date / Time</th>
+            <td fxFlex>{{today | date:'medium'}}</td>
+          </tr>
+          <tr>
+            <th fxFlex>IMEI Number</th>
+            <td fxFlex>412488</td>
+          </tr>
+          <tr>
+            <th fxFlex>Unboxing Video</th>
+            <td fxFlex>
+			<input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" accept="video/mp4,video/x-m4v,video/*" multiple>
+			</td>
+          </tr>
+        </table>
+		<div fxLayout="column">
+          <mat-form-field fxFlex>
+            <textarea matInput placeholder="Comments"></textarea>
+          </mat-form-field>
+        </div>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button (click)="onNoClick()">Cancel</button>
+    <button mat-raised-button color="accent" [mat-dialog-close]="data" cdkFocusInitial>Submit</button>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<!--Header Component-->
+<app-header></app-header>
+<button class="drawer-menu" mat-icon-button (click)="drawer.toggle()" fxShow fxHide.xs="false" fxHide.lg="true" fxHide.xl="true">
+  <mat-icon aria-label="">{{drawer.opened ? 'keyboard_backspace' : 'menu'}}</mat-icon>
+</button>
+<mat-drawer-container>
+  <mat-drawer #drawer mode="push">
+    <!--Menu Component-->
+    <app-menu [dashboard]="dashboardItems" (change)="getDashboardItems($event,pckry)"></app-menu>
+  </mat-drawer>
+  <div fxLayout="row" fxLayoutGap="15px">
+    <div fxFlex="200px" fxHide fxShow.xs="false" fxShow.lg="true" fxShow.xl="true">
+      <!--Menu Component-->
+      <app-menu [dashboard]="dashboardItems" (change)="getDashboardItems($event,pckry)"></app-menu>
+    </div>
+
+    <div fxFlex>
+      <div class="container">
+        <div class="dashboard-wrap">
+          <div class="grid">
+              <!-- <ng4-loading-spinner> </ng4-loading-spinner> -->
+            <app-estimation-approval  [changeEstimationApproval]="reloadEstimationApproval"></app-estimation-approval>
+            <app-ams-filter></app-ams-filter>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-drawer-container>

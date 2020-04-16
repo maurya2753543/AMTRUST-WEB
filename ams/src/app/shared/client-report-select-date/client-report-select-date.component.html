@@ -1,0 +1,19 @@
+<div class="dialog">
+  <h1 class="mat-dialog-title">Select Date for {{data.header}} Report
+      
+  </h1>
+<div class="content">
+  <div class="d-flex date-controls" >
+      <my-date-picker class="date-picker" name="fromDate" [options]="myDatePickerOptions" placeholder="From Date"
+      [(ngModel)]="fromDate" required></my-date-picker>
+      <my-date-picker class="date-picker" name="toDate" [options]="myDatePickerOptions"  placeholder="To Date"
+      [(ngModel)]="toDate" required></my-date-picker>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button color="accent"  (click)="submitClick(fromDate,toDate)"
+    style="height: 40px;">Submit</button>
+  </div>
+</div>
+  
+
+</div>

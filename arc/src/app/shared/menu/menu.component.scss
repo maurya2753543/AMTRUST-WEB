@@ -1,0 +1,43 @@
+@import "../../../assets/scss/variables.scss";
+.menu{
+    padding:25px 0;
+    .mat-button{
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding-left: 40px;
+        border-radius: 0;
+
+        &:last-child{
+            border-bottom: 0px;
+        }
+
+        .mat-icon{
+            position:absolute;
+            left: 20px;
+            top: 50%;
+            font-size: 15px;
+            height: 16px;
+            width: 16px;
+            margin-top: -8px;
+        }
+        &.active{
+            color: #43a047;
+        }
+    }
+    .dashboard{
+        position:relative;
+        padding-left: 35px;
+        margin-bottom: 15px;
+        .mat-checkbox{
+            font-family: $fontface-light;
+            font-size: 12px;
+            line-height: 26px;
+            color: #888;
+            display: block;
+        }
+    }
+}
+.mat-icon1 {
+    @include md-icon-size(20px !important);
+  }

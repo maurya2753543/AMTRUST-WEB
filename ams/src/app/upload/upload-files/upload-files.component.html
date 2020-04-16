@@ -1,0 +1,57 @@
+<!--Header Component-->
+<app-header></app-header>
+<button class="drawer-menu" mat-icon-button (click)="drawer.toggle()" fxShow fxHide.xs="false" fxHide.lg="true" fxHide.xl="true">
+  <mat-icon aria-label="">{{drawer.opened ? 'keyboard_backspace' : 'menu'}}</mat-icon>
+</button>
+<mat-drawer-container>
+  <mat-drawer #drawer mode="push">
+    <!--Menu Component-->
+    <app-menu></app-menu>
+  </mat-drawer>
+  <div fxLayout="row" fxLayoutGap="15px">
+    <div fxFlex="200px" fxHide fxShow.xs="false" fxShow.lg="true" fxShow.xl="true">
+      <!--Menu Component-->
+      <app-menu></app-menu>
+    </div>
+    <div fxFlex>
+      <div class="container">
+        <div class="dashboard-wrap">
+          <div class="grid">
+            <mat-card class="data-card">
+              <mat-card-header class="with-icon">
+                <div class="handle-drag">
+                  <div class="handle">Drag</div>
+                  <i class="material-icons">apps</i>
+                </div>
+                <div class="report-header">
+                  <h1 style="width: 90%; float: left;">Upload Device Model Details</h1>
+                </div>
+              </mat-card-header>
+              <mat-card-content>
+                  <h3 style="font-weight: bold;margin-bottom: 30px">Only excel files allowed.</h3>
+                <div class="uploadText">
+
+                  <div class="align-left" style="margin-bottom: 20px">
+                    <!-- <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" [(ngModel)]="QCFile" multiple> -->
+                    <label class="upload-button">
+                      <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" multiple>
+
+                    </label>
+                  </div>
+                </div>
+                <span class="msg success-msg" *ngIf="successStatus">{{successMsg}}</span>
+
+
+                <div mat-dialog-actions style="padding-bottom: 20px">
+                  <!-- <button mat-raised-button id="cancelButton" >Cancel</button> -->
+                  <button mat-raised-button style="margin-top: 20px;" color="accent" id="submitButton" [disabled]="!submitBtn" (click)="startUpload()"
+                    cdkFocusInitial>Submit</button>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-drawer-container>

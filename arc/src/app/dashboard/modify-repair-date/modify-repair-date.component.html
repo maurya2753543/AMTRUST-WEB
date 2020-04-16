@@ -1,0 +1,29 @@
+<div class="dialog">
+    <h1 mat-dialog-title>Modify Planned Date</h1>
+
+
+    <div mat-dialog-content>
+        <h5 style="color: green;font-size: 14px;font-weight: bold;" *ngIf="showSuccess">{{successMessage}}</h5>
+        <div fxLayout="column">
+            <mat-form-field class="example-full-width">
+                <input matInput [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="newDate" readonly>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker touchUi="true" #picker></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div fxLayout="column">
+            <mat-form-field fxFlex>
+                <textarea matInput placeholder="Comments *" [(ngModel)]="comments"></textarea>
+            </mat-form-field>
+        </div>
+
+    </div>
+    <div mat-dialog-actions>
+        <button mat-raised-button id="cancelButton" (click)="onNoClick()">Cancel</button>
+        <button mat-raised-button color="accent" [disabled]="!comments || !newDate" (click)="updateDate();" cdkFocusInitial>Submit</button>
+    </div>
+
+</div>
+<div class="loading" *ngIf="isLoading" >
+    <mat-spinner [diameter]="40" class="loader" id="myLoader" accent></mat-spinner>
+</div>

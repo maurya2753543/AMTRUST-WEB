@@ -1,0 +1,12 @@
+.dashboard-wrap{
+    margin: 0 -8px;
+    .dashboard-action{
+        padding: 0 8px;
+        text-align: right;
+    }
+}
+
+.grid-item { width: 50%; }
+@media (max-width: 640px) {
+    .grid-item { width: 100%; }
+}

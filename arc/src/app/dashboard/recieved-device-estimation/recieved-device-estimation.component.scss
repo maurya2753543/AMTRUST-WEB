@@ -1,0 +1,68 @@
+@import "../../../assets/scss/variables.scss";
+.spare-part {
+    position: relative;
+    font-size: 13px;
+    padding: 12px 40px 12px 0;
+    margin-bottom: 10px;
+    font-family: $fontface-medium;
+    .mat-mini-fab {
+        position: absolute;
+        right: 0px;
+        top: 50%;
+        width: 32px;
+        height: 32px;
+        margin-top: -16px;
+        line-height: 32px;
+        .mat-icon {
+            margin-top: -8px;
+        }
+    }
+}
+.p-error{
+    text-align: center;
+    color: white;
+    background-color: #43a047;
+    padding: 10px;
+    margin: 10px;
+}
+.data-table {
+    margin: 0 0 15px 0!important;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    &.fixed {
+        tbody {
+            min-height: inherit;
+        }
+    }
+    th,
+    td {
+        font-size: 12px!important;
+    }
+    .mat-icon-button {
+        width: 28px;
+        height: 28px;
+        line-height: 28px;
+        .mat-icon {
+            font-size: 20px;
+        }
+    }
+}
+
+.handCursor {
+    cursor: pointer;
+}
+
+.iconSize {
+    font-size: 21px;
+    color: red;
+}
+
+.borderSepPerc {
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+    width: 38px;
+    text-align: center;
+}
+
+.textCenter {
+    text-align: center;
+    width: 38px;
+}

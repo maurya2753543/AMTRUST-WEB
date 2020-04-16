@@ -1,0 +1,16 @@
+<div class="dialog">
+  <h1 mat-dialog-title>Action Note  </h1>
+  <div class="action-msg">
+    <p>{{actionMsgTitle}}</p>
+  </div>
+  
+    <ol class="list-group">
+      <li class="list-group-item">{{actionMsgScenerio1}}</li>
+      <li class="list-group-item">{{actionMsgScenerio2}}</li>
+    </ol>
+  
+  <div mat-dialog-actions>
+    <button mat-raised-button (click)="onNoClick()">Close</button>
+</div>
+
+</div>

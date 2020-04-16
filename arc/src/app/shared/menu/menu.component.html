@@ -1,0 +1,32 @@
+<div class="menu">
+    <button mat-button [routerLink]="['/dashboard']" [routerLinkActive]="['active']">
+        <mat-icon>dashboard</mat-icon>Operational Dashboard</button>
+    <button mat-button [routerLink]="['/analytic']" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon>pie_chart</mat-icon> Analytics Dashboard</button>
+    <button mat-button (click)="toggle()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon class="mat-icon1" *ngIf="!showReportMenu">keyboard_arrow_right</mat-icon>
+        <mat-icon class="mat-icon1" *ngIf="showReportMenu">keyboard_arrow_down</mat-icon> Actions</button>
+    <div class="dashboard" style="padding: 0 0 0 20px;" *ngIf="showReportMenu">
+        <button mat-button [routerLink]="['/reports/DeviceInTransitReport']" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+            <mat-icon>bookmark</mat-icon> Device In Transit</button>
+        <button mat-button [routerLink]="['/reports/PendingEstimationReport']" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+            <mat-icon>bookmark</mat-icon> Pending Estimation</button>
+        <button mat-button [routerLink]="['/reports/PendingForAmsReport']" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+            <mat-icon>bookmark</mat-icon> Pending For AMS</button>
+        <button mat-button [routerLink]="['/reports/RepairInProgressReport']" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+            <mat-icon>bookmark</mat-icon> Repair In-Progress</button>
+        <button mat-button [routerLink]="['/reports/PendingForDispatchReport']" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+            <mat-icon>bookmark</mat-icon> Pending For Dispatch</button>
+        <button mat-button [routerLink]="['/reports/DeviceDispatchedReport']" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+            <mat-icon>bookmark</mat-icon> Device Dispatched</button>
+        <button mat-button [routerLink]="['/reports/DeviceDeliveredReport']" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+            <mat-icon>bookmark</mat-icon> Device Delivered</button>
+    </div>
+    <button mat-button (click)="toggleInvoice()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+            <mat-icon class="mat-icon1" *ngIf="!showInvoiceMenu">keyboard_arrow_right</mat-icon>
+            <mat-icon class="mat-icon1" *ngIf="showInvoiceMenu">keyboard_arrow_down</mat-icon> Invoices</button>
+    <div class="dashboard" style="padding: 0 0 0 20px;" *ngIf="showInvoiceMenu">
+        <button mat-button [routerLink]="['/invoices/upload']" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+            <mat-icon>cloud_upload</mat-icon>Upload Invoices</button>
+    </div>
+</div>

@@ -1,0 +1,44 @@
+<mat-card class="data-card">
+    <mat-card-header class="with-icon">
+        <div class="handle-drag">
+            <div class="handle">Drag</div>
+            <i class="material-icons">apps</i>
+        </div>
+        Pending
+        <!-- <span class="number-icon" *ngIf="!isToggle">29%</span> -->
+        <div class="header-icon-btn">
+            <button mat-icon-button (click)="toggle()">
+				<i class="material-icons">{{isToggle ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
+			</button>
+        </div>
+    </mat-card-header>
+    <mat-card-content *ngIf="isToggle" [@isToggle]="isToggle">
+
+        <div class="loading-center">
+            <mat-spinner *ngIf="!hideWidgetLoader" [diameter]="40" class="loader" accent></mat-spinner>
+        </div>
+
+        <div class="row" *ngIf="hideWidgetLoader">
+            <div class="col-lg-12">
+                <table class="table-content">
+                    <tr>
+                        <th fxFlex>Repeat Repair (%)</th>
+                        <td fxFlex *ngIf="pendingRes">{{pendingRes['Repeat Repair %']}}</td>
+                    </tr>
+                    <tr>
+                        <th fxFlex>Pending case of Repair</th>
+                        <td fxFlex *ngIf="pendingRes">{{pendingRes['Pending Case of Repair']}}</td>
+                    </tr>
+                    <tr>
+                        <th fxFlex>Pending case of Repair for Approval</th>
+                        <td fxFlex *ngIf="pendingRes">{{pendingRes['Pending Case of Repair for Approval']}}</td>
+                    </tr>
+                    <tr>
+                        <th fxFlex>Pending case for Estimation</th>
+                        <td fxFlex *ngIf="pendingRes">{{pendingRes['Pending Case for Estimation']}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

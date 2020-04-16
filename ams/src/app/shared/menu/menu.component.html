@@ -1,0 +1,59 @@
+<div class="menu" *ngIf="currentUser">
+    <button mat-button [routerLink]="['/ams-dashboard']" [routerLinkActive]="['active']">
+        <mat-icon>dashboard</mat-icon>Operational Dashboard
+    </button>
+    <button mat-button [routerLink]="['/analytic']" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon>pie_chart</mat-icon> Analytics Dashboard
+    </button>
+    <button mat-button (click)="toggle()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon class="mat-icon1" *ngIf="!showReportMenu">keyboard_arrow_right</mat-icon>
+        <mat-icon class="mat-icon1" *ngIf="showReportMenu">keyboard_arrow_down</mat-icon> Reports
+    </button>
+    <div class="dashboard" style="padding: 0 0 0 20px;" *ngIf="showReportMenu">
+        <button mat-button [routerLink]="['/report/EstimateApprovalReport']" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+            <mat-icon>bookmark</mat-icon> Pending For Approval
+        </button>
+        <!-- <button mat-button [routerLink]=['../report/EstimateApprovalReport'] [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><mat-icon>bookmark</mat-icon> Pending For Approval</button> -->
+    </div>
+    <div class="dashboard" style="padding: 0 0 0 20px;margin-top: -15px" *ngIf="showReportMenu">
+        <button mat-button [routerLink]="['/report/DeviceDispatchedReport']" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+            <mat-icon>bookmark</mat-icon>Disputed Devices
+        </button>
+    </div>
+    <div class="dashboard" style="padding: 0 0 0 20px;margin-top: -15px" *ngIf="showReportMenu">
+        <button mat-button [routerLink]="['/report/ArcPerformanceReport']" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+            <mat-icon>bookmark</mat-icon>ARC Performance
+        </button>
+    </div>
+    <button mat-button [routerLink]="['/upload']" [routerLinkActive]="['active']">
+        <mat-icon>cloud_upload</mat-icon> Upload Model Details
+    </button>
+    <button mat-button [routerLink]="['/invoices/download']" [routerLinkActive]="['active']">
+        <mat-icon>cloud_download</mat-icon> Download Invoice
+    </button>
+    <button mat-button [routerLinkActive]="['active']" (click)=specifyDateForReport()>
+        <mat-icon>cloud_download</mat-icon> Download Claim Reports
+    </button>
+    <button mat-button [routerLinkActive]="['active']" (click)=spareDateForReport()>
+        <mat-icon>cloud_download</mat-icon> Download Spare Parts Report
+    </button>
+    <button mat-button (click)="toggleEXC()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon class="mat-icon1" *ngIf="!showEXCMenu">keyboard_arrow_right</mat-icon>
+        <mat-icon class="mat-icon1" *ngIf="showEXCMenu">keyboard_arrow_down</mat-icon> Exception Reports
+    </button>
+    <div class="dashboard" style="padding: 0 0 0 20px;" *ngIf="showEXCMenu">
+        <button mat-button [routerLink]="['/exceptions/arc']" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+            <mat-icon>bookmark</mat-icon>ARC Exceptions
+        </button>
+        <!-- <button mat-button [routerLink]=['../report/EstimateApprovalReport'] [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><mat-icon>bookmark</mat-icon> Pending For Approval</button> -->
+    </div>
+    <div class="dashboard" style="padding: 0 0 0 20px;margin-top: -15px" *ngIf="showEXCMenu">
+        <button mat-button [routerLink]="['/exceptions/lsp']" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+            <mat-icon>bookmark</mat-icon>LSP Exceptions
+        </button>
+    </div>
+
+</div>
+<div class="loading-center" id="loader">
+    <mat-spinner *ngIf="isLoading" [diameter]="50" class="loader" accent></mat-spinner>
+</div>

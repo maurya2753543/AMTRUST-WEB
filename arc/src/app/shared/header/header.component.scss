@@ -1,0 +1,76 @@
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.8);
+    
+    .wrap {
+        width: 100%;
+    }
+    .brand {
+        position: relative;
+        display: inline-block;
+        width: 273px;
+        height: 18px;
+        background-image: url(../../../assets/images/amtrust-logo.png);
+        background-repeat: no-repeat;
+        text-indent: -9999px;
+        margin-top: 13px;
+        background-size: auto 100%;
+        // .logo{
+        //     font-size: 20px;
+        //     line-height: 24px;
+        // }
+        // .subtitle{
+        //     font-size: 13px;
+        //     line-height: 14px;
+        //     font-family: $fontface-light;
+        //     opacity: 0.6;
+        // }
+    }
+
+ }
+
+//  .header1 {
+//     position: fixed;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     z-index: 2;
+//     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.8);
+//     background-color: #00bac7;
+//     .wrap {
+//         width: 100%;
+//         margin-top: 20px;
+//     }
+//     .brand1 {
+//         position: relative;
+//         display: inline-block;
+//         width: 300px;
+//         height: 50px;
+//         background-image: url(../../../assets/images/bolt1.png);
+//         background-repeat: no-repeat;
+//         text-indent: -9999px;
+        
+//         background-size: auto 100%;
+//         // .logo{
+//         //     font-size: 20px;
+//         //     line-height: 24px;
+//         // }
+//         // .subtitle{
+//         //     font-size: 13px;
+//         //     line-height: 14px;
+//         //     font-family: $fontface-light;
+//         //     opacity: 0.6;
+//         // }
+//     }
+//     .header-menu1{
+//         background-color: #170f4f;
+//     }
+    
+
+
+// }

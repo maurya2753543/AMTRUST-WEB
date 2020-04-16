@@ -1,0 +1,32 @@
+<div class="dialog">
+  <h1 mat-dialog-title>Tracking Details</h1>
+          <div mat-dialog-content>
+              <h3>AWB Number: {{deviceTrackingResponse?.DocketNo}}</h3>
+                <h3 style="padding-top: 10px;padding-bottom: 10px">Current Status: {{deviceTrackingResponse?.CurrentStatus}}</h3>
+            <table matSort class="data-table fixed" (matSortChange)="sortData($event)">
+              <thead>
+                  <tr>
+                      <th class="align-left">Location</th>
+                      <th class="align-left">Status</th>
+                      <th class="align-left">Status Date</th>
+                     
+                  </tr>
+              </thead>
+  
+              <tbody>
+                  <tr *ngFor="let item of deviceTrackingResponse?.Events">
+                      <td class="align-left">{{item?.Location}} </td>
+                      <td class="align-left"> {{item?.Status}}</td>
+                      <td class="align-left">{{item?.StatusDate}}</td>    
+                  </tr>
+              </tbody>
+          </table>
+          </div>
+          <div mat-dialog-actions>
+              <button mat-raised-button (click)="onNoClick()">Close</button>
+          </div>
+  
+</div>
+<div class="loading-center" id="loader">
+  <mat-spinner *ngIf="isLoading" [diameter]="40" class="loader" accent></mat-spinner>
+</div>

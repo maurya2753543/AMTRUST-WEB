@@ -1,0 +1,75 @@
+<!--Header Component-->
+<app-header></app-header>
+<button class="drawer-menu" mat-icon-button (click)="drawer.toggle()" fxShow fxHide.xs="false" fxHide.lg="true" fxHide.xl="true">
+  <mat-icon aria-label="">{{drawer.opened ? 'keyboard_backspace' : 'menu'}}</mat-icon>
+</button>
+<mat-drawer-container>
+  <mat-drawer #drawer mode="push">
+    <!--Menu Component-->
+    <app-menu></app-menu>
+  </mat-drawer>
+  <div fxLayout="row" fxLayoutGap="15px">
+    <div fxFlex="200px" fxHide fxShow.xs="false" fxShow.lg="true" fxShow.xl="true">
+      <!--Menu Component-->
+      <app-menu></app-menu>
+    </div>
+    <div fxFlex>
+      <div class="container">
+        <div class="dashboard-wrap">
+          <div class="grid">
+            <mat-card class="data-card">
+              <mat-card-header class="with-icon">
+                <div class="handle-drag">
+                  <div class="handle">Drag</div>
+                  <i class="material-icons">apps</i>
+                </div>
+                <div class="report-header">
+                  <h1 style="width: 90%; float: left;">Download Invoice</h1>
+                  <button mat-icon-button (click)="downloadData()" color="accent" class="align-right download-btn" style="position: relative;"
+                    title="Export">
+                    <i class="fas fa-download"></i>
+                  </button>
+                </div>
+              </mat-card-header>
+              <mat-card-content>
+                <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center" style="margin-bottom: 20px">
+                    <mat-form-field fxFlex="30">
+                        <input matInput placeholder="Please Enter Claim Id" [(ngModel)]="claimId">
+                    </mat-form-field>
+                   
+                        <button mat-raised-button color="accent" (click)="getInvoice()" cdkFocusInitial>Search</button>
+                   
+                </div>
+                <div mat-dialog-content>
+                  <table id="myTable" datatable [dtOptions]="dtOptions" class="row-border hover" *ngIf="isTableData">
+                    <thead>
+                      <tr>
+                          <th class="align-center">OrderId</th>
+                        <th class="align-left">Image name</th>
+                        <th class="align-center">Image type</th>
+                      
+                        <th class="align-center">Download</th>
+                       
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of imageResponse">
+                          <td class="align-left">{{item.orderImagesId}}</td>
+                        <td class="align-left">{{item.imageName}} </td>
+                        <td class="align-left">{{item.imageType}}</td>    
+                        <td>
+                          <a mat-raised-button href="{{item.url}}" target="_blank" color="accent" download="{{item.url}}">Download</a>
+                        </td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-drawer-container>

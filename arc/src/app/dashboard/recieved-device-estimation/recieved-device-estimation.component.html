@@ -1,0 +1,344 @@
+<div class="dialog" *ngIf="!addRecord && !selectModal" id="myModal">
+    <h1 mat-dialog-title>Estimation</h1>
+    <p class="p-error" *ngIf="onBOMopen">All device images are mandatory.</p>
+    <div *ngIf="!confirmation">
+        <mat-tab-group class="tab-group" selectedIndex="1">
+
+            <mat-tab label="Repair Order Details">
+                <div mat-dialog-content>
+                    <table class="table-content">
+                        <tr>
+                            <th fxFlex>Claim ID</th>
+                            <td fxFlex>{{res?.response?.repairOrderDtls[0]?.claimNo}}</td>
+                        </tr>
+                        <tr>
+                            <th fxFlex>Claim Type</th>
+                            <td fxFlex>{{res?.response?.repairOrderDtls[0]?.claimType}}</td>
+                        </tr>
+                        <tr>
+                            <th fxFlex>Claim Date</th>
+                            <td fxFlex>{{res?.response?.repairOrderDtls[0]?.claimDate}}</td>
+                        </tr>
+                        <tr>
+                            <th fxFlex>Brand Name</th>
+                            <td fxFlex>{{res?.response?.repairOrderDtls[0]?.brand}}</td>
+                        </tr>
+                        <tr>
+                            <th fxFlex>Model Number</th>
+                            <td fxFlex>{{res?.response?.repairOrderDtls[0]?.model}}</td>
+                        </tr>
+                        <tr>
+                            <th fxFlex>IMEI Number</th>
+                            <td fxFlex>{{res?.response?.repairOrderDtls[0]?.imeiNo}}</td>
+                        </tr>
+                        <tr>
+                            <th fxFlex>Colour</th>
+                            <td fxFlex>{{res?.response?.repairOrderDtls[0]?.color}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div mat-dialog-actions>
+                    <button mat-raised-button (click)="onNoClick()">Close</button>
+                </div>
+            </mat-tab>
+
+            <mat-tab label="Bill of Material">
+                <div mat-dialog-content>
+
+                    <button mat-raised-button color="accent" style="float: right; margin-bottom: 10px" (click)="addRecord=true">Add
+                        Spare Part</button>
+                    <h5 style="color: green">{{bomRessMessage}}</h5>
+
+                    <table class="data-table fixed">
+                        <thead>
+                            <tr>
+                                <th class="align-left">Select</th>
+                                <th class="align-left">Part Name</th>
+                                <th class="align-left">Part Code</th>
+                                <th class="align-left">Description</th>
+                                <th class="align-left">Price</th>
+                                <th class="align-left">Taxes</th>
+                                <th class="align-right">Comments</th>
+                            </tr>
+                        </thead>
+                        <tbody style="min-height: 32px;max-height: 153px;">
+                            <tr *ngFor="let item of BOMResponse?.response.bomTemplate">
+                                <td class="align-left">
+                                    <mat-checkbox color="primary" [(ngModel)]="item.checked" (ngModelChange)="amountCalculated=false"></mat-checkbox>
+                                </td>
+                                <td class="align-left">{{item.partName}}</td>
+                                <td class="align-left">{{item.partCode}}</td>
+                                <td class="align-left">{{item.partDesc}}</td>
+                                <td class="align-left">
+                                      <p  *ngIf="item.editable>0">{{item.price}}</p>
+                                    <input *ngIf="item.editable==0" type="text" style="border: 0; width: 100%;" [(ngModel)]="item.price"
+                                        (ngModelChange)="amountCalculated=false" (keydown)="onlyNumber($event)"
+                                        maxlength="8" />
+                                </td>
+                                <td class="align-left">
+                                    <p class="borderSepPerc">{{item.taxValue}}%</p>
+                                    <p class="textCenter">{{calculateValues(item)}}</p>
+                                </td>
+                                <td class="align-left">
+                                    <input type="text" style="border: 0; width: 100%;font-size: 13px" [(ngModel)]="item.comments"
+                                        maxlength="50" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div fxLayout="column">
+                        <div fxFlex>
+                            <div fxLayout="row">
+                                <div fxFlex="70" fxLayoutGap="10px">
+                                    <mat-form-field fxFlex="40">
+                                        <input matInput placeholder="Labour Charges" [ngModel]="labourCharge" type="number"
+                                            (ngModelChange)="labourCharge=$event;amountCalculated=false"
+                                            required>
+                                    </mat-form-field>
+                                    <mat-form-field fxFlex="25">
+                                        <mat-select placeholder="Tax (%)" [(ngModel)]="taxPercentage" required>
+                                            <mat-option value="{{item?.rateApplicable}}" *ngFor="let item of taxGroup?.responseObj">{{item?.rateApplicable}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <div>
+                                        <button mat-raised-button color="accent" style="margin-top: 12px !important;" 
+                                            (click)="calculateTaxAndAmount()" [disabled]="!labourCharge || !taxPercentage" cdkFocusInitial>Calculate
+                                            Amount</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div fxLayout="row" fxLayoutGap="10px">
+                                <mat-form-field fxFlex="35">
+                                    <input matInput placeholder="Labour Charge Tax Amount" [(ngModel)]="taxVal"
+                                        readonly>
+                                </mat-form-field>
+                                <mat-form-field fxFlex="35">
+                                    <input matInput placeholder="Labour Charge Total Amount" [(ngModel)]="totalLabourAmount"
+                                        readonly>
+                                </mat-form-field>
+                                <mat-form-field fxFlex="35">
+                                    <input matInput placeholder="Spare Part Charges" [(ngModel)]="sparePartVal"
+                                        readonly>
+                                </mat-form-field>
+                                <mat-form-field fxFlex="35">
+                                    <input matInput placeholder="Spare Part Tax Amount" [(ngModel)]="sparePartTaxVal"
+                                        readonly>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxLayout="row" fxLayoutGap="10px">
+                                <mat-form-field fxFlex="35">
+                                    <input matInput placeholder="Spare Part Total Amount" [(ngModel)]="totalSparePartAmount"
+                                        readonly>
+                                </mat-form-field>
+                                <mat-form-field fxFlex="35">
+                                    <input matInput placeholder="Total Tax (Labour+Spare)" [(ngModel)]="totalTaxVal"
+                                        readonly>
+                                </mat-form-field>
+                                <mat-form-field fxFlex="35">
+                                    <input matInput placeholder="Total Charges (Labour+Spare)" [(ngModel)]="totalAmount"
+                                        readonly>
+                                </mat-form-field>
+                                <mat-form-field fxFlex="35">
+                                    <input matInput placeholder="Total Repair Amount" [(ngModel)]="totalAmountVal"
+                                        readonly>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <mat-form-field fxFlex>
+                            <textarea matInput placeholder="Comments" [(ngModel)]="comment" required></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div mat-dialog-actions>
+                    <button mat-raised-button (click)="onNoClick()">Cancel</button>
+                    <button mat-raised-button color="accent" (click)="checkImages()" [disabled]="!amountCalculated || !comment"
+                        cdkFocusInitial>Submit</button>
+                </div>
+
+            </mat-tab>
+
+            <mat-tab label="Upload Files">
+                <table class="data-table fixed">
+                    <div class="example-form">
+                        <h5 style="color: green;font-size: 14px;font-weight: bold;margin-left: 16px;margin-top: 16px; display: none"
+                            id="showFileUploadSuccess"></h5>
+                        <h5 style="color: red;font-size: 14px;font-weight: bold;margin-left: 16px;margin-top: 16px;"
+                            *ngIf="showError">Only
+                            images and pdf files are allowed!</h5>
+                        <tr>
+                            <td>
+                                <mat-form-field>
+                                    <mat-select placeholder="File Type " [(ngModel)]="fileType" id='picklist'>
+                                        <mat-option *ngFor="let file of filesArray" [value]="file.viewValue">
+                                            {{ file.viewValue }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <input type="file" #fileInput (click)="fileInput.value = ''" ngFileSelect [options]="options"
+                                    id='img' (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput"
+                                    [(ngModel)]="orderImage">
+                            </td>
+                            <div mat-dialog-actions>
+                                <button id="uploadButton" mat-raised-button color="accent" (click)="startUpload()"
+                                    [disabled]="!fileType || !orderImage || showError" cdkFocusInitial>Upload</button>
+                            </div>
+                        </tr>
+                    </div>
+                    <thead>
+                        <tr>
+                            <th class="align-left">File Type</th>
+                            <th class="align-left">Name</th>
+                            <th class="align-left">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let image of orderImageRes">
+                            <td class="align-left">{{image.fileType}}</td>
+                            <td class="align-left">{{image.imageName}}</td>
+                            <td class="align-left">
+                                <i class="material-icons handCursor iconSize" (click)="deleteImage(image.orderImagesId)">delete</i>
+                            </td>
+                    </tbody>
+                </table>
+                <div mat-dialog-actions>
+                    <button mat-raised-button (click)="onNoClick()" class="cancelBtn">Close</button>
+                    <!-- <button mat-raised-button color="accent" [mat-dialog-close]="data" cdkFocusInitial>Upload</button> -->
+                </div>
+            </mat-tab>
+            <mat-tab label="History">
+                <div mat-dialog-content>
+                    <div *ngFor="let item of BOMHistory">
+                        <h1 mat-dialog-title>Estimation version {{item.version}}</h1>
+                        <table class="data-table fixed">
+                            <thead>
+                                <tr>
+                                    <th class="align-left">Part Name</th>
+                                    <th class="align-left">Part Code</th>
+                                    <th class="align-left">Description</th>
+                                    <th class="align-left">Price</th>
+                                    <th class="align-left">Comments</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let newItem of item.orderEstimateDtlsHistory">
+                                    <td class="align-left">{{newItem.partName}}</td>
+                                    <td class="align-left">{{newItem.partCode}}</td>
+                                    <td class="align-left">{{newItem.description}}</td>
+                                    <td class="align-left">{{newItem.price}}</td>
+                                    <td class="align-left">{{newItem.comments}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div fxLayout="column">
+                            <div fxFlex>
+                                <div fxLayout="row" fxLayoutGap="15px">
+                                    <mat-form-field fxFlex>
+                                        <input matInput placeholder="Labour Charges" disabled value="{{item.serviceCharge}}">
+                                    </mat-form-field>
+                                    <mat-form-field fxFlex>
+                                        <input matInput placeholder="Total Amount" disabled value="{{item.totalAmt}}">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <mat-form-field fxFlex>
+                                <textarea matInput placeholder="Comments" disabled value={{item.comments}}></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div mat-dialog-actions>
+                    <button mat-raised-button (click)="onNoClick()">Cancel</button>
+                </div>
+            </mat-tab>
+
+        </mat-tab-group>
+    </div>
+    <div *ngIf="confirmation">
+        <h1 mat-dialog-title>Select Model</h1>
+        <div mat-dialog-content>
+            <div fxLayout="row">
+                <h5>You have selected model {{selectedModelValue}} for the estimation. Do you want to go ahead with
+                    current selection?</h5>
+            </div>
+        </div>
+        <div mat-dialog-actions>
+            <button mat-raised-button (click)="confirmation=false;">No</button>
+            <button mat-raised-button color="accent" [disabled]="!selectedModel" (click)="submitBOM()"
+                cdkFocusInitial>Yes</button>
+        </div>
+    </div>
+</div>
+
+<div class="dialog" *ngIf="addRecord && !selectModal">
+    <h1 mat-dialog-title>Add New Spare Part</h1>
+    <div mat-dialog-content>
+        <div fxLayout="column">
+            <div fxFlex>
+                <div fxLayout="row" fxLayoutGap="15px">
+                    <mat-form-field fxFlex>
+                        <input matInput placeholder="Part name" [(ngModel)]="newPartName" maxlength="25" required>
+                    </mat-form-field>
+                    <mat-form-field fxFlex>
+                        <input matInput placeholder="Part code" [(ngModel)]="newPartCode" maxlength="25" required>
+                    </mat-form-field>
+                </div>
+                <div fxLayout="row" fxLayoutGap="15px">
+                    <mat-form-field fxFlex>
+                        <input matInput placeholder="Description" [(ngModel)]="newDescription" maxlength="50" required>
+                    </mat-form-field>
+                    <mat-form-field fxFlex>
+                        <input matInput placeholder="Price" [(ngModel)]="newPrice" (keydown)="onlyNumber($event)"
+                            maxlength="8" required>
+                    </mat-form-field>
+                </div>
+                <div fxLayout="row" fxLayoutGap="15px">
+                    <mat-form-field fxFlex="50">
+                        <mat-select placeholder="Tax (%)" [(ngModel)]="newTaxes" required>
+                            <mat-option value="{{item.taxGroupId}}" *ngFor="let item of taxGroup?.responseObj">{{item?.rateApplicable}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-raised-button (click)="cancel()">Cancel</button>
+        <button mat-raised-button color="accent" [disabled]="enableAdd()" (click)="add()" cdkFocusInitial>Add Item</button>
+    </div>
+</div>
+
+<div class="dialog" *ngIf="!addRecord && selectModal">
+
+    <h1 mat-dialog-title>Select Model</h1>
+    <div mat-dialog-content>
+        <div fxLayout="row">
+            <div fxFlex="50">
+                <h5 style="margin-top:20px">CRM Model: {{crmModel}}</h5>
+            </div>
+            <div fxFlex="50">
+                <mat-form-field>
+                    <mat-select placeholder="Select ARC Model" [(ngModel)]="selectedModel" (ngModelChange)="setModelValue(selectedModel)"
+                        required>
+                        <mat-option value="{{item.deviceModelId}}" *ngFor="let item of modelList">{{item?.modelName}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-raised-button (click)="onNoClick()">Cancel</button>
+        <button mat-raised-button color="accent" [disabled]="!selectedModel" (click)="selectModal=false;getBomTemplateData();"
+            cdkFocusInitial>Submit</button>
+    </div>
+</div>
+<div class="loading" *ngIf="isLoading" id="myLoader">
+    <mat-spinner [diameter]="40" class="loader" accent></mat-spinner>
+</div>

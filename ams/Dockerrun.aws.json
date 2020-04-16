@@ -1,0 +1,14 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "tarun11/repair-portal-uat-ams:latest",
+    "Update": "true"
+  },
+ "Ports": [
+    {
+      "ContainerPort": "80",
+      "HostPort": "80"
+    }
+  ] 
+
+}

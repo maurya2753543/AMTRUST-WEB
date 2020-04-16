@@ -1,0 +1,38 @@
+<mat-card class="data-card">
+    <mat-card-header class="with-icon">
+        <div class="handle-drag">
+            <div class="handle">Drag</div>
+            <i class="material-icons">apps</i>
+        </div>
+        Cost
+        <!-- <span class="number-icon" *ngIf="!isToggle">29%</span> -->
+        <div class="header-icon-btn">
+            <button mat-icon-button (click)="toggle()">
+				<i class="material-icons">{{isToggle ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
+			</button>
+        </div>
+    </mat-card-header>
+    <mat-card-content *ngIf="isToggle" [@isToggle]="isToggle">
+        <div class="loading-center">
+            <mat-spinner *ngIf="!hideWidgetLoader" [diameter]="40" class="loader" accent></mat-spinner>
+        </div>
+        <div class="row" *ngIf="hideWidgetLoader">
+            <div class="col-lg-12">
+                <table class="table-content">
+                    <tr>
+                        <th fxFlex>Repair Severity %</th>
+                        <td fxFlex *ngIf="costCalRes">{{costCalRes['Repair Severity %']}}</td>
+                    </tr>
+                    <tr>
+                        <th fxFlex>Cost per Repair</th>
+                        <td fxFlex *ngIf="costCalRes">{{costCalRes['Cost Per Repair']}}</td>
+                    </tr>
+                    <tr>
+                        <th fxFlex>Beyond Economical Repair %</th>
+                        <td fxFlex *ngIf="costCalRes">{{costCalRes['Beyond Economical Repair']}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

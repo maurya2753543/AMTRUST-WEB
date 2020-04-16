@@ -1,0 +1,92 @@
+<!--Header Component-->
+<app-header></app-header>
+<button class="drawer-menu" mat-icon-button (click)="drawer.toggle()" fxShow fxHide.xs="false" fxHide.lg="true" fxHide.xl="true">
+	<mat-icon aria-label="">{{drawer.opened ? 'keyboard_backspace' : 'menu'}}</mat-icon>
+</button>
+<mat-drawer-container>
+    <mat-drawer #drawer mode="push">
+        <!--Menu Component-->
+        <app-menu></app-menu>
+    </mat-drawer>
+    <div fxLayout="row" fxLayoutGap="15px">
+        <div fxFlex="200px" fxHide fxShow.xs="false" fxShow.lg="true" fxShow.xl="true">
+            <!--Menu Component-->
+            <app-menu></app-menu>
+        </div>
+        <div fxflex>
+            <div class="container">
+                <form [formGroup]="filterForm" autocomplete="off" style="margin:15px">
+                    <div class="row">
+
+                        <div class="col-lg-4" style="padding-left: 0;">
+                            <mat-form-field fxFlex style="width: 100px;">
+                                <mat-select #brandSelect formControlName="brandValue" class="filter-select" placeholder="Brand" (onClose)='getBrandModel(brands)' multiple>
+                                    <mat-option #allBrandSelected (click)="toggleAllSelection(allBrandSelected)" [value]="0">All</mat-option>
+                                    <mat-option (click)="tosslePerOne($event)" class="filter-option" *ngFor="let brand of mobileBrandResponse" [value]="brand.deviceBrandId">{{brand.brandName}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-4">
+                            <mat-form-field fxFlex style="width: 100px;">
+                                <mat-select placeholder="Model" formControlName="modelValue" multiple>
+                                    <mat-option *ngIf="hasModelList" #allModelSelected (click)="toggleModelAllSelection(allModelSelected)" [value]="0">All</mat-option>
+                                    <mat-option (click)="tossleModelPerOne(allModelSelected.viewValue)" *ngFor="let model of modelList" [value]="model.deviceModelId">{{model.modelName}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-4">
+                            <mat-form-field fxFlex style="width: 100px;">
+                                <mat-select placeholder="Location" formControlName="locationValue" multiple>
+                                    <mat-option #allLocationSelected (click)="toggleLocationAllSelection(allLocationSelected)" [value]="0">All</mat-option>
+                                    <mat-option (click)="tossleLocationPerOne(allLocationSelected.viewValue)" *ngFor="let location of cityResponse" [value]="location.cityMasterId">{{location.cityName}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-4" style="padding-left: 0;">
+                            <mat-form-field fxFlex>
+                                <mat-select placeholder="ARC" formControlName="arcValue" multiple>
+                                    <mat-option #allArcSelected (click)="toggleArcAllSelection(allArcSelected)" [value]="0">All</mat-option>
+                                    <mat-option (click)="arcPerOne($event)" *ngFor="let arc of arcResponse" [value]="arc.arcId">{{arc.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3">
+                            <mat-form-field fxFlex style="width: 100px;">
+                                <input matInput [matDatepicker]="dispatchedDatePicker" formControlName="startDate" [max]="endDate" (click)="dispatchedDatePicker.open()" [readonly]="true" placeholder="Start Date">
+                                <mat-datepicker-toggle matSuffix [for]="dispatchedDatePicker"></mat-datepicker-toggle>
+                                <mat-datepicker touchUi="true" #dispatchedDatePicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3">
+                            <mat-form-field fxFlex style="width: 100px;">
+                                <input matInput [matDatepicker]="dispatchedDatePicker1" [min]="startDate" formControlName="endDate" (click)="dispatchedDatePicker1.open()" [readonly]="true" placeholder="End Date">
+                                <mat-datepicker-toggle matSuffix [for]="dispatchedDatePicker1"></mat-datepicker-toggle>
+                                <mat-datepicker touchUi="true" #dispatchedDatePicker1></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-lg-2">
+
+                            <button mat-raised-button color="accent" style="margin-top: 9px;" (click)="setFilter();" [disabled]="disableFilter()">Filter</button>
+                            <!-- <button mat-raised-button color="accent" style="margin-top: 9px;" (click)="setFilter();" >Filter</button> -->
+
+                        </div>
+
+
+                    </div>
+                </form>
+                <div class="dashboard-wrap">
+                    <app-estimated-tat class="col-lg-6" [estFilter]="filtersObj" style="padding: 0px;"></app-estimated-tat>
+                    <app-repair-tat class="col-lg-6" [repairFilter]="filtersObj" style="padding: 0px;"></app-repair-tat>
+                    <app-approval-tat class="col-lg-6" [approvalFilter]="filtersObj" style="padding: 0px;"></app-approval-tat>
+                    <app-dispatch-tat class="col-lg-6" [dispatchFilter]="filtersObj" style="padding: 0px;"></app-dispatch-tat>
+                    <app-cost-tat class="col-lg-6" [costFilter]="filtersObj" style="padding: 0px;"></app-cost-tat>
+                    <app-pending-tat class="col-lg-6" [pendingFilter]="filtersObj" style="padding: 0px;"></app-pending-tat>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-drawer-container>
+<div class="loading" *ngIf="isLoading">
+    <mat-spinner [diameter]="40" class="loader" id="myLoader" accent></mat-spinner>
+</div>

@@ -1,0 +1,61 @@
+<div class="dialog" tabindex="-1">
+  <h1 mat-dialog-title>Dispatch Details</h1>
+
+  <div mat-dialog-content>
+      <table class="table-content">
+      </table>
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="15px" fxLayoutGap.xs="0px">
+          <mat-form-field fxFlex class="fontSizeBrows">
+              <span class="placeholderAddress">Logistic Name</span>
+              <input class="m-t-15" readonly matInput value="{{courierName}}">
+          </mat-form-field>
+          <mat-form-field fxFlex class="fontSizeBrows">
+              <span class="placeholderAddress">AWB Number</span>
+              <input class="m-t-15" readonly matInput value="{{awbNumber}}">
+          </mat-form-field>
+        
+    </div>
+    <!-- <div fxLayout="column">
+      
+  </div> -->
+  <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="15px" fxLayoutGap.xs="0px">
+      <mat-form-field fxFlex>
+        <span >Booked Date/Time  </span>
+        <input class="m-t-15" readonly matInput value="{{bookedDateTime | dateFormatWt}}">
+          
+      </mat-form-field>
+      <mat-form-field fxFlex>
+          <span >Picked Up By  </span>
+        <input matInput [(ngModel)]="pickingPerson" required  >
+        
+    </mat-form-field>
+  </div>
+      
+      <div fxLayout="column">
+        
+    </div>
+    <div fxLayout="column">
+      <mat-form-field class="example-full-width">
+            <input matInput [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" placeholder="Pick Up Date/Time" [readonly]="true" [(ngModel)]="newDate">
+            <owl-date-time #dt1></owl-date-time>
+      </mat-form-field>
+  </div>
+    <div fxLayout="column">
+        <mat-form-field fxFlex>
+            <textarea matInput placeholder="Comments" [(ngModel)]="comments" required></textarea>
+        </mat-form-field>
+    </div>
+
+  <div mat-dialog-actions>
+
+      <button mat-raised-button id="cancelButton" (click)="onNoClick()">Cancel</button>
+     
+      <button mat-raised-button color="accent" *ngIf="courierCompanyValue!='AmTrust' && courierCompanyValue!='Self Pickup' && courierCompanyValue!='Self Deliver'"
+          (click)="submitDispatchForOthers()" [disabled]="!newDate ||!pickingPerson ||!comments" cdkFocusInitial>Submit</button>
+  </div>
+
+
+</div>
+<div class="loading" *ngIf="isLoading" >
+    <mat-spinner [diameter]="40" class="loader" id="myLoader" accent></mat-spinner>
+</div>

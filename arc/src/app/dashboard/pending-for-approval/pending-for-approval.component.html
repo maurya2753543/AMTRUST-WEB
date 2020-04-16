@@ -1,0 +1,67 @@
+<mat-card class="data-card" [style.display]="show ? 'block': 'none'">
+    <mat-card-header class="with-icon">
+        <div class="handle-drag">
+            <div class="handle">Drag</div>
+            <i class="material-icons">apps</i>
+        </div>
+        Pending For AMS
+        <span class="number-icon" *ngIf="!isToggle">{{res?.response?.roList?.length}}</span>
+        <div class="header-icon-btn">
+
+            <button mat-icon-button (click)="toggle()">
+                <i class="material-icons">{{isToggle ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
+            </button>
+        </div>
+    </mat-card-header>
+    <mat-card-content *ngIf="isToggle" [@isToggle]="isToggle">
+        <table matSort class="data-table fixed" (matSortChange)="sortData($event)">
+            <thead>
+                <tr>
+                    <th class="align-left">Brand Name
+                        <br>IMEI No.</th>
+                    <th class="align-left" mat-sort-header="estimationDate">Submission Date
+                        <br>Submitted By</th>
+                    
+                    <th class="align-left" mat-sort-header="approvalDate">Approval Due Date/Time</th>
+                    <th class="align-left" mat-sort-header="pendingFor">Pending For?</th>
+                    <th class="align-left" mat-sort-header="action">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of res?.response.roList">
+                    <!-- <td class="align-left">{{item?.brand}} {{item?.model}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)">{{item?.imeiNo}}</button>
+                    </td> -->
+
+                    <td class="align-left">
+                        <span *ngIf="item.logisticsPartner=='captive'" style="margin-right: 2px;">
+                                            <i class="fa fa-motorcycle" aria-hidden="true"></i>
+                                        </span>
+                        <span *ngIf="item.logisticsPartner=='logicloud' || item.logisticsPartner=='logicloud_ams'" style="margin-right: 2px;">
+                                            <i class="fa fa-truck" aria-hidden="true"></i>
+                                        </span> {{item?.brand}} {{item?.model}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)">{{item?.imeiNo}}</button>
+                    </td>
+
+                    <!-- <td class="align-left">{{item.estimationDate | date:'dd MMM yyyy, h:mm a'}}
+                        <br>{{item.estimatedBy}}</td> -->
+                    <td class="align-left">{{item?.estimationDate  | dateFormatWt}} <br> {{item?.estimatedBy}}
+                    </td>
+                    
+                    <td class="align-left" [ngClass]="{'red': getIsDate(item.approvalDate) == true }">
+                        {{item?.approvalDueDate  | dateFormatWt}}
+                    </td>
+                    <td class="align-left">{{item.orderState}}
+                        <!-- <span *ngIf="item.orderState=='Disputed'; then item.orderState='Dispute Details' else item.orderState">{{item?.orderState}}</span>
+                        <span *ngIf="item.orderState=='Disputed'">Dispute Details</span> -->
+                    </td>
+                    <td>
+                        <button mat-button class="btn" color="primary" (click)="actionDetails(item?.orderState,item?.orderEstimateId,item?.orderId)">View Details</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </mat-card-content>
+</mat-card>

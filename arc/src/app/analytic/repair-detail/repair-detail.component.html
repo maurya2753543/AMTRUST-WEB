@@ -1,0 +1,43 @@
+<div class="dialog">
+    <div mat-dialog-title>
+        <h1 style="width: 90%; float: left;">Repair TAT Details</h1>
+        <button mat-icon-button color="accent" (click)="downloadData()" class="align-right" style="position: relative;" title="Export">
+			<i class="fas fa-download"></i>
+		</button>
+    </div>
+    <div mat-dialog-content>
+        <table id="myTable" datatable [dtOptions]="dtOptions" class="row-border hover" *ngIf="isTableData">
+            <thead>
+                <tr>
+                    <th class="align-left">Repair Order No.</th>
+                    <th class="align-left">Repair Order Date</th>
+                    <th class="align-left">Device Name</th>
+                    <th class="align-left">IMEI No.</th>
+                    <th class="align-left">Received Date</th>
+                    <th class="align-left">Repair Date</th>
+                    <th class="align-left">Revised Repair Date <br>(No of times repaired)</th>
+                    <th class="align-left">Estimation Date</th>
+                    <th class="align-left">Time Taken</th>
+                    <th class="align-left">Post Repair</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of repairTATDetailRes">
+                    <td class="align-left">{{item?.orderId}} </td>
+                    <td class="align-left">{{item?.orderedDate}}</td>
+                    <td class="align-left">{{item?.brand}} {{item?.model}}</td>
+                    <td class="align-left">{{item?.imeiNo}}</td>
+                    <td class="align-left">{{item?.receivedDate}}</td>
+                    <td class="align-left">{{item?.repairDate}}</td>
+                    <td class="align-left">{{item?.revisedRepairDate}} ({{item?.reEstimation}})</td>
+                    <td class="align-left">{{item?.estimationSubmissionDate}}</td>
+                    <td class="align-left">{{item?.timeTaken}} </td>
+                    <td class="align-left">{{item?.postRepair}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-raised-button (click)="onNoClick()">Close</button>
+    </div>
+</div>

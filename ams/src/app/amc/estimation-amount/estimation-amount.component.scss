@@ -1,0 +1,26 @@
+.total-amount {
+    th,
+    td {
+        font-weight: bold;
+        font-size: 15px;
+    }
+}
+
+.data-table.fixed tbody {
+    min-height: 0px !important;
+    max-height: 250px;
+}
+
+.dialog .mat-dialog-content {
+    padding: 0px 0px !important;
+}
+
+.data-table.fixed {
+    margin: 0px !important;
+}
+
+.list-group {
+    padding-left: 0;
+    margin-bottom: 20px;
+    margin-top: 20px !important;
+}

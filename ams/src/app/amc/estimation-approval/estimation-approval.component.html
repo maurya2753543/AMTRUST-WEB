@@ -1,0 +1,61 @@
+<mat-card class="data-card">
+    <mat-card-header class="with-icon">
+        <div class="handle-drag">
+            <div class="handle">Drag</div>
+            <i class="material-icons">apps</i>
+        </div>
+        Approval <span class="number-icon" *ngIf="!isToggle">5</span>
+        <div class="header-icon-btn">
+                
+            <button mat-icon-button (click)="toggle()">
+            <i class="material-icons">{{isToggle ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
+          </button>
+        </div>
+    </mat-card-header>
+    <mat-card-content *ngIf="isToggle" [@isToggle]="isToggle">
+            <div class="loading-center">
+                    <mat-spinner *ngIf="!isApproved" [diameter]="40" class="loader" accent></mat-spinner>
+                </div>
+        <table matSort class="data-table fixed" (matSortChange)="sortData($event)">
+            <thead>
+                <tr>
+                    <th class="align-left">Claim Id <br> Claim Date</th>
+                    <th class="align-left">Repair Order No <br> Repair Order Date</th>
+                    <th class="align-left">ARC Name</th>
+                    <th class="align-left">Device Name <br> IMEI No.</th>
+                    <th class="align-left">Estimation Date Time</th>
+                    <th class="align-left" mat-sort-header="eta1">Existing Value</th>
+                    <th class="align-left" mat-sort-header="eta2">Current Market Value</th>
+                    <th class="align-left" mat-sort-header="eta3">Available Liability Limit</th>
+                    <th class="align-left">Post Repair Order</th>
+                    <th class="align-left">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr *ngFor="let item of deviceResponse">
+                    <td class="align-left">{{item.claimNo}}<br> {{item.claimDate | dateFormatWt}}
+                    </td>
+                    <td class="align-left">{{item.orderId}}<br> {{item.orderedDate | dateFormatWt}}
+                    </td>
+                    <td class="align-left ellipsis">{{item.arcName}}</td>
+                    <td class="align-left">{{item.brand}} {{ item.model}}<br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)">{{item.imeiNo}}</button>
+                    </td>
+                    <td class="align-left">{{item.estimateDateTime | dateFormatWt}}</td>
+                    <td class="align-left">{{item.existingValue}}
+                    </td>
+                    <td class="align-left"> {{item.currentmarketValue}}
+                    </td>
+                    <td class="align-left">{{item.availableLiablityLimit}}
+                    </td>
+                   
+                    <td>{{item.postRepairOrder}}</td>
+                    <td class="align-left action" style="padding: 6px 0px;">
+                        <button mat-raised-button color="accent" (click)="getAmountDetails(item.orderEstimateId,item.orderId,item.comments)">Accept / Reject</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </mat-card-content>
+</mat-card>

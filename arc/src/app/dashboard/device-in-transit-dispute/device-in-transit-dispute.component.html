@@ -1,0 +1,48 @@
+<div class="dialog"  >
+  <h1 mat-dialog-title>Dispute</h1>
+  <div mat-dialog-content>
+    
+    <table class="table-content">
+        <h5 style="color: green;font-size: 14px;font-weight: bold" *ngIf="showFileUploadSuccess">{{showFileUploadSuccessMessage}}</h5>
+      <tr>
+        <th fxFlex>Dispute Type</th>
+        <td fxFlex>
+          <mat-form-field fxFlex>
+            <mat-select placeholder="Dispute Type" [(ngModel)]="disputeTypes" required>
+              <mat-option value="{{item.disputeNumber}}" *ngFor="let item of pickList">{{item?.disputeNumber}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <th fxFlex>Unboxing Video<br>
+        <span class="msg error-msg" *ngIf="bigFileSize">Please upload file less than or equal to 20MB in size.</span>
+        </th>
+        <td fxFlex>
+          <label class="upload-button">
+            <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" [(ngModel)]="disputeFile">
+          </label>
+          <!-- <input type="file" (change)="fileChange($event)" placeholder="Upload file" accept=".wmv"> -->
+          <h5 style="color: red" *ngIf="showWrongExtError">File type not allowed</h5>
+        </td>
+      </tr>
+    </table>
+    <div fxLayout="column">
+      <mat-form-field fxFlex>
+        <textarea matInput placeholder="Comments" [(ngModel)]="comments" required></textarea>
+      </mat-form-field>
+    </div>
+    <!-- <div fxLayout="column">
+          <mat-form-field fxFlex>
+            <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" multiple> or choose file(s)
+          </mat-form-field>
+        </div> -->
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button id="cancelButton" (click)="onNoClick()">Cancel</button>
+    <button mat-raised-button color="accent" (click)="startUpload()" id="submitButton" [disabled]="disableSubmit()" cdkFocusInitial>Submit</button>
+  </div>
+</div>
+<div class="loading" *ngIf="isLoading" >
+  <mat-spinner [diameter]="40" class="loader" id="myLoader" accent></mat-spinner>
+</div>

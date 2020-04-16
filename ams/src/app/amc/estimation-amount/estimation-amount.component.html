@@ -1,0 +1,165 @@
+<div class="dialog">
+    <h1 mat-dialog-title>Approve Estimation
+        <span class="msg success-msg" *ngIf="isSubmitted">{{message}}</span>
+        <span style="float:right;cursor:pointer;" (click)="onNoClick()">
+            <i class="material-icons">clear</i>
+        </span>
+    </h1>
+
+    <mat-tab-group class="tab-group" selectedIndex="0">
+        <mat-tab label="Estimation">
+            <div mat-dialog-content>
+                <table class="data-table fixed">
+                    <thead>
+                        <tr>
+                            <th class="align-left">Approval</th>
+                            <th class="align-left">Part Name</th>
+                            <th class="align-left">Part Code</th>
+                            <th class="align-left">Description</th>
+                            <th class="align-center">Price</th>
+                            <th class="align-center">Tax</th>
+                            <th class="align-left">Comments</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of deviceResponseReestimation">
+                            <td class="align-left re-estimation-select">
+                                <mat-select placeholder="Select" (change)="gotValue()">
+                                    <mat-option value="1">Yes</mat-option>
+                                    <mat-option value="0">No</mat-option>
+
+                                </mat-select>
+                            </td>
+                            <td class="align-left">{{item.partName}}</td>
+                            <td class="align-left">{{item.partCode}}</td>
+                            <td class="align-left">{{item.description}}</td>
+                            <td class="align-center">{{item.price}}</td>
+                            <td class="align-center">{{item.partTaxValue}}</td>
+                            <td class="align-left">{{item.comments}}</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <table class="table-content" style="margin-bottom: 10px;">
+                    <tr style="padding-left: 15px;padding-right:15px;">
+                        <th fxFlex>Labour Charge</th>
+                        <td fxFlex>{{deviceResponseServiceCharge}}</td>
+                    </tr>
+                    <tr style="padding-left: 15px;padding-right:15px;">
+                        <th fxFlex>Tax Amount</th>
+                        <td fxFlex>{{deviceResponseTaxAmount}}</td>
+                    </tr>
+                    <tr class="total-amount" style="padding-left: 15px;padding-right:15px;">
+                        <th fxFlex>Total Amount</th>
+                        <td fxFlex>{{deviceResponseTotalAmt}}</td>
+                    </tr>
+                    <tr class="total-amount" style="padding-left: 15px;padding-right:15px;">
+                        <th fxFlex>Comments by ARC</th>
+                        <td fxFlex>{{commentsFromData}}</td>
+                    </tr>
+                </table>
+                <div fxLayout="column" style="padding-left:15px;padding-right:15px;">
+                    <!-- <div fxFlex style="margin-bottom: 10px;">
+					<div fxLayout="row" fxLayoutGap="15px">
+						<mat-checkbox color="primary">  Beyond Economic Repair</mat-checkbox>
+					</div>
+				</div> -->
+                    <mat-form-field fxFlex>
+                        <textarea matInput [(ngModel)]="comments" placeholder="Approval / Rejected Comments" required></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div mat-dialog-actions>
+                <button mat-raised-button color="accent" [disabled]="!comments || !isSelected" (click)="getEstimationStatus('Approved')">Approved</button>
+                <button mat-raised-button color="warn" [disabled]="!comments || !isSelected" (click)="getEstimationStatus('Reject')">Reject/Re-estimation</button>
+                <!-- <button mat-raised-button color="warn" (click)="onNoClick()">Rework</button> -->
+                <button mat-raised-button color="warn" [disabled]="!comments || !isSelected" (click)="getEstimationStatus('Reject & Send to AMS')">Reject & Send to AMS</button>
+                <button mat-raised-button color="warn" [disabled]="!comments || !isSelected" (click)="getEstimationStatus('Reject & Send to Customer')">Reject & Send to Customer</button>
+
+
+            </div>
+        </mat-tab>
+        <mat-tab label="Images">
+            <div mat-dialog-content>
+                <div *ngIf="hasImage">
+                    <div class="col-lg-4">
+                        <div class="list-group">
+                            <a href="javascript:void(0)" (click)="getImage('top image')" class="list-group-item">Top Image
+
+                            </a>
+                            <a href="javascript:void(0)" (click)="getImage('bottom image')" class="list-group-item">Bottom Image</a>
+                            <a href="javascript:void(0)" (click)="getImage('back image')" class="list-group-item">Back Image</a>
+                            <a href="javascript:void(0)" (click)="getImage('front image')" class="list-group-item">Front Image</a>
+                            <a href="javascript:void(0)" (click)="getImage('left image')" class="list-group-item">Left Image</a>
+                            <a href="javascript:void(0)" (click)="getImage('right image')" class="list-group-item">Right Image</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-8" style="margin-top: 20px;">
+                        <p *ngIf="noSelectedImage">No Images Found</p>
+                        <div *ngIf="!noSelectedImage">
+                            <div *ngFor="let img of imgSelector">
+                                <img [src]="img.url" class="imageType" alt="MobileImage" style="width: 100%;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!hasImage">
+                    <div class="col-lg-12" style="text-align: center;margin-top: 20px">
+                        <p>No Images Found</p>
+                    </div>
+                </div>
+            </div>
+            <div mat-dialog-actions>
+                <button mat-raised-button (click)="onNoClick()">Close</button>
+            </div>
+        </mat-tab>
+        <mat-tab label="Estimation History">
+            <div mat-dialog-content *ngFor="let versionItem of versionResponse" style="overflow: auto">
+                <h1 mat-dialog-title>Estimation version {{versionItem.version}}</h1>
+
+                <table class="data-table fixed">
+                    <thead>
+                        <tr>
+                            <th class="align-left">Part Name</th>
+                            <th class="align-left">Part Code</th>
+                            <th class="align-left">Description</th>
+                            <th class="align-left">Price</th>
+                            <th class="align-right">Comments</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of versionItem.orderEstimateDtlsHistory">
+                            <td class="align-left">{{item.partName}}</td>
+                            <td class="align-left">{{item.partCode}}</td>
+                            <td class="align-left">{{item.description}}</td>
+                            <td class="align-left">{{item.price}}</td>
+                            <td class="align-left">{{item.comments}}</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <div fxLayout="column">
+                    <div fxFlex>
+                        <div fxLayout="row" fxLayoutGap="15px" style="padding-left: 15px;padding-right:15px;">
+                            <mat-form-field fxFlex>
+                                <input matInput placeholder="Labour Charges" disabled [value]="versionItem.serviceCharge">
+                            </mat-form-field>
+                            <mat-form-field fxFlex>
+                                <input matInput placeholder="Total Amount" disabled [value]="versionItem.totalAmt">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <mat-form-field fxFlex style="padding-left: 15px;padding-right:15px;">
+                        <textarea matInput placeholder="Comments" disabled [value]="versionItem.approvedComments"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div mat-dialog-actions>
+                <button mat-raised-button (click)="onNoClick()">Close</button>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+
+</div>

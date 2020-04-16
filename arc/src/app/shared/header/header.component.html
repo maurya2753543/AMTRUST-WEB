@@ -1,0 +1,27 @@
+<mat-toolbar color="primary" class="header header1">
+  <div class="wrap wrap1" fxFlexOffset="44px" fxFlexOffset.lg="0px" fxFlexOffset.xl="0px">
+    <div fxLayout="row" fxLayoutGap="15px">
+      <div fxFlex>
+        <div class="brand brand1" >
+           AmTrust
+        </div>
+      </div>
+      <div fxFlex="none">
+        <button mat-mini-fab class="header-menu header-menu1" [matMenuTriggerFor]="menu">{{currentUser.userName.charAt(0).toUpperCase()}}</button>
+        <mat-menu #menu="matMenu">
+          <div class="header-menu-content">
+            <div class="head" *ngIf="currentUser">
+              <div class="icon">{{currentUser.userName.charAt(0).toUpperCase()}}</div>
+              <h4>{{currentUser.userName}}</h4>
+              <!-- <h5>atul.singh@abc.com</h5> -->
+            </div>
+            <div class="action">
+              <button mat-raised-button mat-raised-button color="accent" (click)="logout()">Logout</button>
+            </div>
+          </div>
+        </mat-menu>
+      </div>
+    </div>
+  </div>
+
+</mat-toolbar>

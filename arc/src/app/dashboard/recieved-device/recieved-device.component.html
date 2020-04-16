@@ -1,0 +1,73 @@
+<mat-card class="data-card" [style.display]="show ? 'block': 'none'">
+    <mat-card-header class="with-icon">
+        <div class="handle-drag">
+            <div class="handle">Drag</div>
+            <i class="material-icons">apps</i>
+        </div>
+        Pending Estimation
+        <span class="number-icon" *ngIf="!isToggle">{{res?.response?.roList?.length}}</span>
+        <div class="header-icon-btn">
+            <button mat-icon-button (click)="toggle()">
+        <i class="material-icons">{{isToggle ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
+      </button>
+        </div>
+    </mat-card-header>
+    <mat-card-content *ngIf="isToggle" [@isToggle]="isToggle">
+        <div class="loading-center">
+            <mat-spinner *ngIf="!isPE" [diameter]="40" class="loader" accent></mat-spinner>
+        </div>
+        <table matSort class="data-table fixed" (matSortChange)="sortData($event)">
+            <thead>
+                <tr>
+                    <th class="align-left">Brand Name
+                        <br>IMEI No.</th>                          
+                    <th class="align-center">AWB No.</th>
+                    <th class="align-left" mat-sort-header="recievedDate">Received Date/Time
+                    </th>
+                    <th class="align-left" mat-sort-header="estimationDueDate">Estimation Due Date/Time
+                        <br>(Hours Left)</th>
+                    <th class="align-left">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of res?.response.roList">
+                    <!-- <td class="align-left">{{item?.brand}} {{item?.model}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)">{{item?.imeiNo}}</button>
+                    </td> -->
+                    <td class="align-left">
+                        <span *ngIf="item.logisticsPartner=='captive'" style="margin-right: 2px;">
+                                        <i class="fa fa-motorcycle" aria-hidden="true"></i>
+                                    </span>
+                        <span *ngIf="item.logisticsPartner=='logicloud' || item.logisticsPartner=='logicloud_ams'" style="margin-right: 2px;">
+                                        <i class="fa fa-truck" aria-hidden="true"></i>
+                                    </span> {{item?.brand}} {{item?.model}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)">{{item?.imeiNo}}</button>
+                    </td>
+                    <td class="align-center ng-tns-c9-3" *ngIf="item.logisticsPartner!='captive'">
+                        <a style="cursor: pointer;" (click)="trackAWB(item)">{{item?.awbNo}}</a>
+                    </td>
+                    <td class="align-center ng-tns-c9-3" *ngIf="item.logisticsPartner=='captive'">{{item?.awbNo}} </td>
+                    <td class="align-left">{{item?.receivedDateTime  | dateFormatWt}}</td>
+                    <td style="color:red;" *ngIf="item.sla>24">
+                        {{item?.estimationDueDate  | dateFormatWt}}
+                        <br>{{item?.sla}} Hours Left
+                    </td>
+                    <td *ngIf="item.sla<=24">
+                        {{item?.estimationDueDate  | dateFormatWt}}
+                        <br>{{item?.sla}} Hours Left
+                    </td>
+                    <!-- <td *ngIf="item.hoursLeft<24">
+                        {{item?.estimationDueDate | date:'dd MMM yyyy'}}
+                        <br>{{item?.hoursLeft}} Hours Left
+                    </td> -->
+                    <td class="align-left action">
+                        <button mat-raised-button color="accent" (click)="estimation(item)">Estimation</button>
+                        <button mat-raised-button color="accent" (click)="disputeDevice(item.orderId)" class="btn-resize">Dispute</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,37 @@
+<div class="dialog">
+  <h1 mat-dialog-title>Planned Date History</h1>
+
+
+  <div mat-dialog-content>
+    <table class="data-table fixed">
+      <thead>
+          <tr>
+              
+              <th class="align-left">Last Updated<br> Time</th>
+              <th class="align-left">Updated By</th>
+              <th class="align-left">Planned Date Time</th>
+              <th class="align-right">Comments</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let item of dateResponse">
+              
+              <td class="align-left">{{item.lastUpdatedTime | dateFormatWt}}</td>
+              <td class="align-left">{{item.lastUpdatedBy}}</td>
+              <td class="align-left">{{item.plannedDateTime | dateFormatWt}}</td>
+              <td class="align-left">{{item.comments}}</td>
+              
+              
+          </tr>
+      </tbody>
+  </table>
+  </div>
+  <div mat-dialog-actions>
+      <button mat-raised-button (click)="onNoClick()">Close</button>
+      <!-- <button mat-raised-button color="accent" [disabled]="!comments || !newDate" (click)="updateDate();" cdkFocusInitial>Submit</button> -->
+  </div>
+
+</div>
+<div class="loading-center">
+  <mat-spinner *ngIf="isLoading" [diameter]="40" class="loader" accent></mat-spinner>
+</div>

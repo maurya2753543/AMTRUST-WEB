@@ -1,0 +1,62 @@
+@import "../../../assets/scss/variables.scss";
+.login {
+    z-index: 2;
+    width: 440px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    .logo {
+        margin: 0 auto 30px auto;
+        // width: 130px;
+        width: 317px;
+        height: 22px;
+        // height: 32px;
+        // background-image: url('../../../assets/images/amtrust-logo.png');
+        background-image: url(../../../assets/images/amtrust-logo.png);
+        background-repeat: no-repeat;
+        text-indent: -9999px;
+        background-size: auto 100%;
+    }
+    .mat-card {
+        padding: 30px;
+        position: relative;
+        .mat-card-header {
+            // margin-bottom: 10px;
+            .mat-card-title {
+                font-family: $fontface-light;
+                font-size: 24px;
+            }
+        }
+        .mat-card-content {
+            margin-bottom: 0;
+        }
+        .mat-card-actions {
+            margin: 0;
+            text-align: center;
+            .mat-raised-button {
+                display: block;
+                width: 100%;
+            }
+        }
+        .mat-form-field {
+            display: block;
+            .show-password {
+                font-size: 120%;
+            }
+            .mat-icon {
+                vertical-align: top!important;
+            }
+        }
+    }
+    .forgot-password {
+        padding-top: 10px;
+        text-align: center;
+        .mat-button {
+            color: #fff;
+            font-size: 12px;
+            font-family: $fontface-light;
+        }
+    }
+}

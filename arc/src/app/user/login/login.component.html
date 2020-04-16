@@ -1,0 +1,45 @@
+<section class="login">
+    <div class="logo">Bolttech</div>
+ <!--  <div class="brand">
+        AmTrust
+    </div> --> 
+    <mat-card class="mat-card">
+        <form [formGroup]="loginForm">
+            <mat-card-title class="title">Welcome</mat-card-title>
+            <mat-card-content>
+                <section class="msg error-msg" *ngIf="isError">
+                    Please enter valid username/password.
+                </section>
+                <section class="msg error-msg" *ngIf="!isAuthentic">
+                    {{errorMsg}}
+                </section>
+
+                <div class="form-group">
+                    <mat-form-field>
+                        <input matInput placeholder="Username" formControlName="username" class="form-control" />
+                    </mat-form-field>
+                </div>
+                <div class="form-group">
+                    <mat-form-field>
+                        <input matInput placeholder="password" [type]="hide ? 'password' : 'text'"
+                            formControlName="password" class="form-control" />
+                    </mat-form-field>
+
+                </div>
+            </mat-card-content>
+            <div style="margin: auto; display: block; " class="mat-button">
+                <mat-card-actions>
+                    <button style="color: white;" mat-raised-button color="primary" [disabled]="!loginForm.valid" (click)="login()"
+                        class="button">Login</button>
+                </mat-card-actions>
+
+            </div>
+             <div class="help">
+            <a style="display: block; margin: auto; text-align: center;">Need help? Contact us</a>
+        </div>
+        </form>
+
+
+    </mat-card>
+
+</section> 

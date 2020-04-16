@@ -1,0 +1,84 @@
+<!--Header Component-->
+<app-header></app-header>
+<button class="drawer-menu" mat-icon-button (click)="drawer.toggle()" fxShow fxHide.xs="false" fxHide.lg="true" fxHide.xl="true">
+  <mat-icon aria-label="">{{drawer.opened ? 'keyboard_backspace' : 'menu'}}</mat-icon>
+</button>
+<mat-drawer-container>
+    <mat-drawer #drawer mode="push">
+        <!--Menu Component-->
+        <app-menu></app-menu>
+    </mat-drawer>
+    <div fxLayout="row" fxLayoutGap="15px">
+        <div fxFlex="200px" fxHide fxShow.xs="false" fxShow.lg="true" fxShow.xl="true">
+            <!--Menu Component-->
+            <app-menu></app-menu>
+        </div>
+        <div fxFlex>
+            <div class="container">
+                <div class="dashboard-wrap">
+                    <div class="grid">
+                        <mat-card class="data-card">
+                            <mat-card-header class="with-icon">
+                                <div class="handle-drag-report">
+                                    <div class="handle">Drag</div>
+                                    <i class="material-icons">apps</i>
+                                </div>
+                                <div class="report-header">
+                                    <h1 style="width: 90%; float: left;">Device Dispatched Report</h1>
+                                    <button mat-icon-button (click)="downloadData()" color="accent" class="align-right download-btn" style="position: relative;" title="Export">
+                      <i class="fas fa-download"></i>
+                    </button>
+                                </div>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <div class="loading-center">
+                                    <mat-spinner *ngIf="!isTableData" [diameter]="40" class="loader" accent></mat-spinner>
+                                </div>
+                                <div mat-dialog-content>
+                                    <table id="myTable" datatable [dtOptions]="dtOptions" class="row-border hover" *ngIf="isTableData" style="padding-top: 20px;">
+                                        <thead style="background: rgba(0,0,0,.12);">
+                                            <tr>
+                                                <th class="align-left">Customer Name</th>
+                                                <th class="align-center">Courier Name</th>
+                                                <th class="align-center">AWB No.</th>
+                                                <th class="align-center">Dispatched Date</th>
+                                                <th class="align-center">Delivery Status</th>
+                                                <th class="align-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of deviceResponse?.response.roList">
+                                                <!-- <td class="align-left">
+                                                    {{item.policyHolderName}} </td> -->
+                                                <td class="align-left">
+                                                    <span *ngIf="item.logisticsPartner=='captive'" style="margin-right: 2px;">
+                                                        <i class="fa fa-motorcycle" aria-hidden="true"></i>
+                                                    </span>
+                                                    <span *ngIf="item.logisticsPartner=='logicloud' || item.logisticsPartner=='logicloud_ams'" style="margin-right: 2px;">
+                                                    <i class="fa fa-truck" aria-hidden="true"></i>
+                                                </span>{{item.policyHolderName}}
+
+                                                </td>
+                                                <td class="align-left">{{item.courierName}}</td>
+                                                <td class="align-left" *ngIf="item.courierName !='captive' && item.courierName !='AmTrust'">
+                                                    <a style="cursor: pointer;" (click)="trackAWB(item)">{{item?.awbNo}}</a>
+                                                </td>
+                                                <td class="align-left" *ngIf="item.courierName=='captive' || item.courierName=='AmTrust'">{{item?.awbNo}} </td> 
+                                                <td class="align-left">{{item.eta | dateFormatWt}}</td>
+                                                <td class="align-left">{{item.orderState}}</td>
+                                                <td class="align-left action">
+                                                    <button title="Shipment Label" mat-raised-button color="accent" (click)="print(item.orderId)"><i class="material-icons">print</i></button>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-drawer-container>

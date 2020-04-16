@@ -1,0 +1,17 @@
+.dialog{
+    overflow-x: inherit
+}
+.content{
+    padding: 20px;
+    
+    text-align: center;
+}
+.date-controls{
+    margin-bottom: 20px;
+    .date-picker:last-child{
+        padding-left: 10px;
+    }
+}
+.date-picker{
+    width: 50%;
+}

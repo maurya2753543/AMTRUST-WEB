@@ -1,0 +1,116 @@
+@import "../../../assets/scss/variables.scss";
+
+.login {
+    background-color: white;
+    overflow: hidden;
+    ::ng-deep .mat-input-underline {
+        display: none;
+    }
+    .form-group::ng-deep .mat-input-infix.mat-form-field-infix {
+        width: 400px;
+    }
+    .form-control {
+        
+        text-decoration: none;
+        background-color: white;
+        font-size: 16px;
+    }
+    .form-group {
+        margin-left: 40%;
+        font-size: 16px;
+        width: 350px;
+    }
+    .msg{
+        width: 400px;
+        margin-left: 40%;
+    }
+    .help{
+        margin-left: 100px;;
+    }
+   
+    .logo {
+      
+        // width: 130px;
+        width: 100%;
+        height: 85px;
+        // height: 32px;
+        // background-image: url('../../../assets/images/amtrust-logo.png');
+        background-image: url(../../../assets/images/bolttech_logo.png);
+        background-repeat: no-repeat;
+        text-indent: -9999px;
+        background-size: auto 100%;
+        margin-left: 30px;
+        margin-top: 20px;
+        
+        
+        
+
+    }
+    .forgot-password {
+        padding-top: 10px;
+        width: 100px;
+       margin-left: 10%;
+       text-align: center;
+        .mat-button {
+            color:black;
+            text-align: center;
+            width: 100px;
+            margin-left: 10%;
+        
+        }
+    }
+    .button{
+        background-color: #170f4f;
+        margin-left: 105px;
+        
+    }
+    .title{
+        text-align: center;
+        margin-left: 100px;
+    }
+}
+
+
+.mat-card{
+    background-color: #00bac7;
+    padding-bottom: 5%;
+    margin-top: 30px;
+    
+
+    
+}
+
+
+
+// .header {
+//     position: fixed;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     z-index: 2;
+//     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.8);
+//     .wrap {
+//         width: 100%;
+//     }
+//     .brand {
+//         position: relative;
+//         display: inline-block;
+//         width: 273px;
+//         height: 18px;
+//         background-image: url(../../../assets/images/amtrust-logo.png);
+//         background-repeat: no-repeat;
+//         text-indent: -9999px;
+//         margin-top: 13px;
+//         background-size: auto 100%;
+//         // .logo{
+//         //     font-size: 20px;
+//         //     line-height: 24px;
+//         // }
+//         // .subtitle{
+//         //     font-size: 13px;
+//         //     line-height: 14px;
+//         //     font-family: $fontface-light;
+//         //     opacity: 0.6;
+//         // }
+//     }
+// }

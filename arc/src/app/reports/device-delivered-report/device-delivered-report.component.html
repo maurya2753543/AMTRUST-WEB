@@ -1,0 +1,85 @@
+<!--Header Component-->
+<app-header></app-header>
+<button class="drawer-menu" mat-icon-button (click)="drawer.toggle()" fxShow fxHide.xs="false" fxHide.lg="true" fxHide.xl="true">
+  <mat-icon aria-label="">{{drawer.opened ? 'keyboard_backspace' : 'menu'}}</mat-icon>
+</button>
+<mat-drawer-container>
+    <mat-drawer #drawer mode="push">
+        <!--Menu Component-->
+        <app-menu></app-menu>
+    </mat-drawer>
+    <div fxLayout="row" fxLayoutGap="15px">
+        <div fxFlex="200px" fxHide fxShow.xs="false" fxShow.lg="true" fxShow.xl="true">
+            <!--Menu Component-->
+            <app-menu></app-menu>
+        </div>
+        <div fxFlex>
+            <div class="container">
+                <div class="dashboard-wrap">
+                    <div class="grid">
+                        <mat-card class="data-card">
+                            <mat-card-header class="with-icon">
+                                <div class="handle-drag-report">
+                                    <div class="handle">Drag</div>
+                                    <i class="material-icons">apps</i>
+                                </div>
+                                <div class="report-header">
+                                    <h1 style="width: 90%; float: left;">Device Delivered Report</h1>
+                                    <button mat-icon-button (click)="downloadData()" color="accent" class="align-right download-btn" style="position: relative;" title="Export">
+                      <i class="fas fa-download"></i>
+                    </button>
+                                </div>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <div class="loading-center" *ngIf="isLoading">
+                                    <mat-spinner *ngIf="!isTableData" [diameter]="40" class="loader" accent></mat-spinner>
+                                </div>
+                                <div mat-dialog-content>
+                                    <table id="myTable" datatable [dtOptions]="dtOptions" class="row-border hover" *ngIf="isTableData" style="padding-top: 20px;">
+                                        <thead style="background: rgba(0,0,0,.12);">
+                                            <tr>
+                                              <th class="align-left">Claim Id
+                                                <br> Claim Date</th>
+                                            <th class="align-left">Repair Order No
+                                                <br> Repair Order Date</th>
+                                            <th class="align-left">ARC Name</th>
+                                            <th class="align-left">Device Name
+                                                <br> IMEI No.</th>
+                                            <th class="align-left">AWB Number</th>
+                                            <th class="align-left">Logistic Provider</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of deviceResponse?.responseObj">
+                                          
+                                                                                      
+                                              <td class="align-left">{{item.claimNo}}
+                                                <br>{{item.claimDate | dateFormatWt}}</td>
+                                            <td class="align-left">{{item.orderId}}
+                                                <br>{{item.orderedDate | dateFormatWt}}</td>
+                                            <td>{{item.arcName}}</td>
+                                            <td class="align-left">{{item.brand}}
+                                                <br>
+                                                <button mat-button class="btn" style="text-align: left;padding: 0" color="primary" (click)="getRepairOrderDetails(item.orderId)">{{item.imeiNo}}</button>
+                                            </td>
+                                            <td class="align-left" *ngIf="item.courierName!='AmTrust'">
+                                              <a style="cursor: pointer;" (click)="trackAWB(item)">{{item?.awbNo}}</a>
+                                          </td>
+                                          <td class="align-left" *ngIf="item.courierName=='AmTrust'">{{item?.awbNo}} </td>
+                                            <td class="align-left">{{item.courierName}}</td>
+                                           
+                                              
+                                            
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-drawer-container>

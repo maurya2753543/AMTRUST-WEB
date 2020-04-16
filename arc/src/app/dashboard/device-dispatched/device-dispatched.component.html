@@ -1,0 +1,54 @@
+<mat-card class="data-card" [style.display]="show ? 'block': 'none'">
+    <mat-card-header class="with-icon">
+        <div class="handle-drag">
+            <div class="handle">Drag</div>
+            <i class="material-icons">apps</i>
+        </div>
+        Device Dispatched
+        <span class="number-icon" *ngIf="!isToggle">{{res?.response?.roList?.length}}</span>
+        <div class="header-icon-btn">
+            <button mat-icon-button (click)="toggle()">
+                <i class="material-icons">{{isToggle ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
+            </button>
+        </div>
+    </mat-card-header>
+    <mat-card-content *ngIf="isToggle" [@isToggle]="isToggle">
+        <table class="data-table fixed">
+            <thead>
+                <tr>
+                    <th class="align-left">Customer Name</th>
+                    <th class="align-left">Courier Name</th>
+                    <th class="align-left">AWB No.</th>
+                    <th class="align-left">Dispatched Date</th>
+                    <th class="align-left">Delivery Status</th>
+                    <th class="align-left">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of res?.response.roList">
+                    <td class="align-left">
+                        <span *ngIf="item.logisticsPartner=='captive'" style="margin-right: 2px;">
+                        <i class="fa fa-motorcycle" aria-hidden="true"></i>
+                    </span>
+                        <span *ngIf="item.logisticsPartner=='logicloud' || item.logisticsPartner=='logicloud_ams'" style="margin-right: 2px;">
+                        <i class="fa fa-truck" aria-hidden="true"></i>
+                    </span>{{item.policyHolderName}}
+
+                    </td>
+                    <!-- <td class="align-left">{{item.policyHolderName}}</td> -->
+                    <td class="align-left">{{item.courierName}}</td>
+                    <td class="align-left" *ngIf="item.courierName !='captive' && item.courierName !='Direct Pick Up'">
+                        <a style="cursor: pointer;" (click)="trackAWB(item)">{{item?.awbNo}}</a>
+                    </td>
+                    <td class="align-left" *ngIf="item.courierName=='captive' || item.courierName=='Direct Pick Up'">{{item?.awbNo}} </td>
+                    <td class="align-left">{{item.eta  | dateFormatWt}}</td>
+                    <td class="align-left">{{item.orderState}}</td>
+                    <td class="align-left action">
+                        <button title="Shipment Label" mat-raised-button color="accent" (click)="print(item.orderId)"><i class="material-icons">print</i></button>
+                    </td>
+                    
+                </tr>
+            </tbody>
+        </table>
+    </mat-card-content>
+</mat-card>

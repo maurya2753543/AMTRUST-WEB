@@ -1,0 +1,82 @@
+<!--Header Component-->
+<app-header></app-header>
+<button class="drawer-menu" mat-icon-button (click)="drawer.toggle()" fxShow fxHide.xs="false" fxHide.lg="true" fxHide.xl="true">
+  <mat-icon aria-label="">{{drawer.opened ? 'keyboard_backspace' : 'menu'}}</mat-icon>
+</button>
+<mat-drawer-container>
+    <mat-drawer #drawer mode="push">
+        <!--Menu Component-->
+        <app-menu></app-menu>
+    </mat-drawer>
+    <div fxLayout="row" fxLayoutGap="15px">
+        <div fxFlex="200px" fxHide fxShow.xs="false" fxShow.lg="true" fxShow.xl="true">
+            <!--Menu Component-->
+            <app-menu></app-menu>
+        </div>
+        <div fxFlex>
+            <div class="container">
+                <div class="dashboard-wrap">
+                    <div class="grid">
+                        <mat-card class="data-card">
+                            <mat-card-header class="with-icon">
+                                <div class="handle-drag">
+                                    <div class="handle">Drag</div>
+                                    <i class="material-icons">apps</i>
+                                </div>
+                                <div class="report-header">
+                                    <h1 style="width: 90%; float: left;">Upload Invoice</h1>
+                                </div>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <div class="loading-center">
+                                    <mat-spinner *ngIf="!isTableData" [diameter]="40" class="loader" accent></mat-spinner>
+                                </div>
+                                <div mat-dialog-content>
+                                    <table id="myTable" datatable [dtOptions]="dtOptions" class="row-border hover"  *ngIf="isTableData">
+                                        <thead>
+                                            <tr>
+                                                <th class="align-left">Order Id</th>
+                                                <th class="align-center">Claim Id</th>
+                                                <th class="align-center">IMEI No.</th>
+                                                <th class="align-center">Brand</th>
+                                                <th class="align-center">Model</th>
+                                                <th class="align-center">File</th>
+                                                <th class="align-center">Upload</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of deviceList">
+                                                <td class="align-left">
+                                                    <span *ngIf="item.logisticsPartner=='captive'" style="margin-right: 2px;">
+                                                        <i class="fa fa-motorcycle" aria-hidden="true"></i>
+                                                    </span>
+                                                    <span *ngIf="item.logisticsPartner=='logicloud' || item.logisticsPartner=='logicloud_ams'" style="margin-right: 2px;">
+                                                        <i class="fa fa-truck" aria-hidden="true"></i>
+                                                    </span>{{item.orderId}}
+
+                                                </td>
+                                                <!-- <td class="align-left">{{item.orderId}} </td> -->
+                                                <td class="align-left">{{item.claimNo}}</td>
+                                                <td class="align-left">{{item.imeiNo}}</td>
+                                                <td class="align-left">{{item.brand}}</td>
+                                                <td class="align-left">{{item.model}}</td>
+                                                <td class="align-left">
+                                                    <input type="file" ngFileSelect [options]="options" (ngModel)="file + item.orderId" (uploadOutput)="onUploadOutput($event,item.orderId)" [uploadInput]="uploadInput">
+
+                                                </td>
+                                                <td>
+                                                    <button mat-raised-button color="accent" (click)="startUpload(item.orderId)">Upload</button>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-drawer-container>

@@ -1,0 +1,14 @@
+.css-ellipsis {
+    width: 50px;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    &.lsp-status-hover{
+        &:hover {
+            overflow: visible;
+            width: 100px;;
+            white-space: pre-wrap
+        }
+    }
+}

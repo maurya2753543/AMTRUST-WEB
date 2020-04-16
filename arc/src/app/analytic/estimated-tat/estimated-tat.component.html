@@ -1,0 +1,77 @@
+<mat-card class="data-card">
+    <mat-card-header class="with-icon">
+        <div class="handle-drag">
+            <div class="handle">Drag</div>
+            <i class="material-icons">apps</i>
+        </div>
+        Estimated TAT
+        <!-- <span class="number-icon" *ngIf="!isToggle"></span> -->
+        <div class="header-icon-btn">
+            <button mat-icon-button (click)="toggle()">
+				<i class="material-icons">{{isToggle ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
+			</button>
+        </div>
+    </mat-card-header>
+    <mat-card-content *ngIf="isToggle" [@isToggle]="isToggle">
+        <div class="loading-center">
+            <mat-spinner *ngIf="!hideWidgetLoader" [diameter]="40" class="loader" accent></mat-spinner>
+        </div>
+        <div class="row" *ngIf="hideWidgetLoader">
+            <div class="col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <i class="fa fa-calculator fa-5x"></i>
+                            </div>
+                            <div class="col-xs-10 text-right">
+                                <div class="row" *ngIf="!noData">
+                                    <div class="col-lg-4">
+                                        <div class="huge">{{estimatedCalRes?.estimation}}</div>
+                                        <div>Estimation</div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <p style="font-size: 40px;">{{estimatedCalRes?.reEstimation}} <sup style="font-size: 15px; top: -1.5em;">{{estimatedCalRes?.result}}%</sup></p>
+                                        <div>Re-Estimation</div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="huge">{{estimatedCalRes?.averageTat}}</div>
+                                        <div>Average TAT</div>
+                                    </div>
+                                </div>
+
+                                <div class="row" *ngIf="noData">
+                                    <div class="col-lg-4">
+                                        <div class="huge">0</div>
+                                        <div>Estimation</div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <p style="font-size: 40px;">0 <sup style="font-size: 15px; top: -1.5em;">0</sup></p>
+                                        <div>Re-Estimation</div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="huge">0</div>
+                                        <div>Average TAT</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="javascript:void(0)" (click)="estimatedDetail()">
+                        <div class="panel-footer">
+                            <span class="pull-left">View Details</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+
+                <div style="display: block" *ngIf="!noData">
+                    <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)" [colors]="pieChartColors"></canvas>
+                </div>
+            </div>
+        </div>
+
+
+    </mat-card-content>
+</mat-card>

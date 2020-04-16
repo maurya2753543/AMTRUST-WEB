@@ -1,0 +1,19 @@
+.dialog {
+    .mat-dialog-content {
+        padding: 0px!important;
+        .content {
+            padding: 15px;
+        }
+    }
+}
+
+.uploadText {
+    font-size: 12px;
+}
+
+.rightSpc {
+    margin-right: 35px;
+}
+.mat-dialog-container{
+    overflow: inherit !important;
+}

@@ -1,0 +1,90 @@
+<!--Header Component-->
+<app-header></app-header>
+<button class="drawer-menu" mat-icon-button (click)="drawer.toggle()" fxShow fxHide.xs="false" fxHide.lg="true" fxHide.xl="true">
+  <mat-icon aria-label="">{{drawer.opened ? 'keyboard_backspace' : 'menu'}}</mat-icon>
+</button>
+<mat-drawer-container>
+  <mat-drawer #drawer mode="push">
+    <!--Menu Component-->
+    <app-menu></app-menu>
+  </mat-drawer>
+  <div fxLayout="row" fxLayoutGap="15px">
+    <div fxFlex="200px" fxHide fxShow.xs="false" fxShow.lg="true" fxShow.xl="true">
+      <!--Menu Component-->
+      <app-menu></app-menu>
+    </div>
+    <div fxFlex>
+      <div class="container">
+        <div class="dashboard-wrap">
+          <div class="grid">
+            <mat-card class="data-card">
+              <mat-card-header class="with-icon">
+                <div class="handle-drag">
+                  <div class="handle">Drag</div>
+                  <i class="material-icons">apps</i>
+                </div>
+                <div class="report-header">
+                  <h1>ARC Exceptions List</h1>
+                </div>
+
+              </mat-card-header>
+              <mat-card-content>
+               
+                <div class="row">
+                  <div class="col-lg-2" style="margin-top: 20px;margin-bottom: 20px">
+                    <mat-form-field fxFlex style="width: 140px;">
+                      <input matInput [matDatepicker]="dispatchedDatePicker" [(ngModel)]="startDate" [max]="endDate" (click)="dispatchedDatePicker.open()"
+                        [readonly]="true" placeholder="Start Date">
+                      <mat-datepicker-toggle matSuffix [for]="dispatchedDatePicker"></mat-datepicker-toggle>
+                      <mat-datepicker touchUi="true" #dispatchedDatePicker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-2" style="margin-top: 20px;margin-bottom: 20px">
+                    <mat-form-field fxFlex style="width: 140px;">
+                      <input matInput [matDatepicker]="dispatchedDatePicker1" [min]="startDate" [(ngModel)]="endDate" (click)="dispatchedDatePicker1.open()"
+                        [readonly]="true" placeholder="End Date">
+                      <mat-datepicker-toggle matSuffix [for]="dispatchedDatePicker1"></mat-datepicker-toggle>
+                      <mat-datepicker touchUi="true" #dispatchedDatePicker1></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-2">
+                    <button mat-raised-button style="margin-top: 23px;margin-bottom: 20px" color="accent" id="submitButton" [disabled]="!startDate || !endDate" (click)="getArcExceptions();"
+                      cdkFocusInitial>Submit</button>
+                  </div>
+                </div>
+                <div class="row" style="padding:10px 10px 10px 10px">
+                  <table id="myTable" datatable [dtOptions]="dtOptions" class="row-border hover report-table" *ngIf="isTableData">
+                    <thead>
+                        <tr>
+                            <th class="align-left">Claim No.</th>
+                            <th class="align-left"> IMEI No.</th>
+                            <th class="align-left">Brand</th>
+                            <th class="align-left">City</th>
+                            <th class="align-left">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr *ngFor="let item of arcExceptionList">
+                            <td class="align-left">{{item.claimNo}}</td>
+                            <td class="align-left">{{item.imeiNo}}</td>
+                            <td class="align-left">{{item.brand}}</td>
+                            <td class="align-left">{{item.customerCity}}</td>
+                            <td class="align-left action" style="padding: 6px 0px;">
+                                <button class="small-btn" mat-raised-button color="accent" (click)="dialogInfo('arc')">Action</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-drawer-container>
+<div class="loading-center" id="loader">
+    <mat-spinner *ngIf="isLoading" [diameter]="40" class="loader" accent></mat-spinner>
+  </div>

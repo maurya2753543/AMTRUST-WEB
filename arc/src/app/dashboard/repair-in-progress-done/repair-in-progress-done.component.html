@@ -1,0 +1,52 @@
+<div class="dialog">
+    <h1 mat-dialog-title>Repair Complete</h1>
+    <div mat-dialog-content>
+        <h5 style="color: green;font-size: 14px;font-weight: bold;margin-left: 16px;margin-top: 16px;" *ngIf="showFileUploadSuccess">{{showFileUploadSuccessMessage}}</h5>
+        <div class="content">
+            <div class="example-form">
+                <tr class="uploadText">
+
+                    <td class="align-left">
+                        <label class="rightSpc">QC File *</label>
+                    </td>
+                    <td class="align-left">
+                        <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" [(ngModel)]="QCFile" multiple>
+                    </td>
+                </tr>
+            </div>
+            <div fxLayout="column">
+                <mat-form-field fxFlex>
+                    <textarea matInput [(ngModel)]="comments" placeholder="Comment" required></textarea>
+                </mat-form-field>
+            </div>
+
+            <table class="data-table fixed">
+                <thead>
+                    <tr>
+                        <th class="align-left">Quality Check Task Name</th>
+                        <th class="align-left">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of QCTaskList?.responseObj">
+                        <td class="align-left">{{item.name}}</td>
+                        <td class="align-left">
+                            <mat-radio-group>
+                                <mat-radio-button [(ngModel)]="item.isSelectedYes" [checked]="item.isSelectedYes ==true" name="mode" (click)="setItem(item,true);" [value]="true" ngDefaultControl>Yes</mat-radio-button>
+                                <mat-radio-button [(ngModel)]="item.isSelectedYes" [checked]="item.isSelectedYes ==false" name="mode" (click)="setItem(item,false);" [value]="false" ngDefaultControl>No</mat-radio-button>
+                            </mat-radio-group>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div mat-dialog-actions>
+        <button mat-raised-button id="cancelButton" (click)="onNoClick()">Cancel</button>
+        <button mat-raised-button color="accent" id="submitButton" [disabled]="disableSubmit()" (click)="startUpload()" cdkFocusInitial>Submit</button>
+    </div>
+</div>
+<div class="loading-center" id="loader">
+    <mat-spinner *ngIf="isLoading" [diameter]="40" class="loader" accent></mat-spinner>
+</div>

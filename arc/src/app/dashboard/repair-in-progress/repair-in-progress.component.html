@@ -1,0 +1,74 @@
+<mat-card class="data-card" [style.display]="show ? 'block': 'none'">
+    <mat-card-header class="with-icon">
+        <div class="handle-drag">
+            <div class="handle">Drag</div>
+            <i class="material-icons">apps</i>
+        </div>
+        Repair In-Progress
+        <span class="number-icon" *ngIf="!isToggle">{{res?.response?.roList?.length}}</span>
+        <div class="header-icon-btn">
+
+            <button mat-icon-button (click)="toggle()">
+                <i class="material-icons">{{isToggle ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
+            </button>
+        </div>
+    </mat-card-header>
+    <mat-card-content *ngIf="isToggle" [@isToggle]="isToggle">
+        <table class="data-table fixed">
+            <thead>
+                <tr>
+                    <th class="align-left">Brand Name
+                        <br>IMEI No.</th>
+                    <th class="align-left">Estimation
+                        <br>Approved On</th>
+                    <th class="align-left">Repair Due Date/Time
+                        <br>Planned Date/Time</th>
+                    <th class="align-left">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of res?.response.roList">
+                    <!-- <td class="align-left">{{item?.brand}} {{item?.model}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)">{{item?.imeiNo}}</button>
+                    </td> -->
+
+                    <td class="align-left">
+                        <span *ngIf="item.logisticsPartner=='captive'" style="margin-right: 2px;">
+                                                <i class="fa fa-motorcycle" aria-hidden="true"></i>
+                                            </span>
+                        <span *ngIf="item.logisticsPartner=='logicloud' || item.logisticsPartner=='logicloud_ams'" style="margin-right: 2px;">
+                                                <i class="fa fa-truck" aria-hidden="true"></i>
+                                            </span> {{item?.brand}} {{item?.model}}
+                        <br>
+                        <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)">{{item?.imeiNo}}</button>
+                        <button mat-button class="btn" color="primary" style="cursor:pointer" (click)="viewApprovedPart(item)">View approved parts</button>
+                    </td>
+                    <td class="align-left">{{item?.estimationApprovedDate  | dateFormatWt}}</td>
+                    <td class="align-left handCursor">{{item?.repairDueDate  | dateFormatWt}}
+                        <br>
+                        <span>{{item?.repairPlannedDate  | dateFormatWt}}</span>
+                        <i (click)="modifyRepairDate(item.orderId)" class="material-icons iconSize">
+                            event_note
+                        </i>
+                        <i (click)="getDateHistory(item.orderId)" class="material-icons iconSize">
+                            info
+                        </i>
+                      
+                    </td>
+                    <!-- <td>
+                        <mat-form-field fxFlex class="widthDate">
+                            <input matInput [matDatepicker]="dispatchedDatePicker" (click)="dispatchedDatePicker.open()" [readonly]="true" placeholder="time" [value]="date.value">
+                            <mat-datepicker-toggle matSuffix [for]="dispatchedDatePicker"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi="true" #dispatchedDatePicker></mat-datepicker>
+                        </mat-form-field>
+                    </td> -->
+                    <td class="align-left action">
+                        <button mat-raised-button color="accent" (click)="done(item.orderId)">Repair Complete</button>
+                        <button mat-raised-button color="accent" (click)="reEstimation(item)" class="btn-resize">Re-Estimation</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </mat-card-content>
+</mat-card>

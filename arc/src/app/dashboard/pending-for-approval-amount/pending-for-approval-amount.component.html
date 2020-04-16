@@ -1,0 +1,45 @@
+<div class="dialog">
+    <h1 mat-dialog-title>Amount</h1>
+    <div mat-dialog-content>
+	    <table class="data-table fixed">
+			<thead>
+				<tr>				
+					<th class="align-left">Part Name</th>
+					<th class="align-left">Part Code</th>
+					<th class="align-left">Description</th>
+					<th class="align-left">Price</th>
+					<th class="align-left">Tax</th>
+					<th class="align-right">Comments</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let item of deviceResponse">
+					<td class="align-left">{{item?.partName}}</td>
+					<td class="align-left">{{item?.partCode}}</td>
+					<td class="align-left">{{item?.description}}</td>
+					<td class="align-left">{{item?.price}}</td>
+					<td class="align-left">{{item?.partTaxValue}}</td>
+					<td class="align-left">{{item?.comments}}</td>
+				</tr>
+				
+			</tbody>
+        </table>
+      <table class="table-content">
+        <tr>
+          <th fxFlex>Labour Charge</th>
+          <td fxFlex>{{serviceCharge}}</td>
+				</tr>
+				<tr>
+          <th fxFlex>Total Tax Amount</th>
+          <td fxFlex>{{taxamount}}</td>
+        </tr>
+        <tr class="total-amount">
+          <th fxFlex>Total Repair Amount</th>
+          <td fxFlex>{{totalAmount}}</td>
+        </tr>
+      </table>
+    </div>
+    <div mat-dialog-actions>
+      <button mat-raised-button (click)="onNoClick()">Close</button>
+    </div>
+  </div>

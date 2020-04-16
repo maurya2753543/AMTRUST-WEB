@@ -1,0 +1,137 @@
+<div class="dialog">
+    <h1 mat-dialog-title>Repair Order Details</h1>
+    <mat-tab-group class="tab-group" selectedIndex="0">
+
+        <mat-tab label="Repair Order Details">
+            <div mat-dialog-content>
+                <table class="table-content">
+                    <tr>
+                        <th fxFlex>Claim ID</th>
+                        <td fxFlex>{{res?.response.repairOrderDtls[0].claimNo}}</td>
+                    </tr>
+                    <tr>
+                        <th fxFlex>Claim Type</th>
+                        <td fxFlex>{{res?.response.repairOrderDtls[0].claimType}}</td>
+                    </tr>
+                    <tr>
+                        <th fxFlex>Claim Date</th>
+                        <td fxFlex>{{res?.response.repairOrderDtls[0].claimDate}}</td>
+                    </tr>
+                    <tr>
+                        <th fxFlex>Brand Name</th>
+                        <td fxFlex>{{res?.response.repairOrderDtls[0].brand}}</td>
+                    </tr>
+                    <tr>
+                        <th fxFlex>Model Number</th>
+                        <td fxFlex>{{res?.response.repairOrderDtls[0].model}}</td>
+                    </tr>
+                    <tr>
+                        <th fxFlex>IMEI Number</th>
+                        <td fxFlex>{{res?.response.repairOrderDtls[0].imeiNo}}</td>
+                    </tr>
+                    <tr>
+                        <th fxFlex>Colour</th>
+                        <td fxFlex>{{res?.response.repairOrderDtls[0].color}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div mat-dialog-actions>
+                <button mat-raised-button (click)="onNoClick()">Close</button>
+            </div>
+        </mat-tab>
+        <mat-tab label="Damage Detail">
+            <div mat-dialog-content>
+                <table class="table-content">
+                    <tr *ngFor="let detail of res?.response.damageDtls">
+                        <th fxFlex>{{detail?.damageDesc}}</th>
+                        <td fxFlex>{{detail?.damageValue}}</td>
+                    </tr>
+                    <tr>
+                        <th fxFlex>Chronology/Scenario</th>
+                        <td fxFlex>{{res?.response?.repairOrderDtls[0]?.chronology}}</td>
+                    </tr>
+                    <tr *ngIf="res?.response.damageDtls.length==0">
+                        <h6 style="text-align:center">No Record Found</h6>
+                    </tr>
+                </table>
+            </div>
+            <div mat-dialog-actions>
+                <button mat-raised-button (click)="onNoClick()">Close</button>
+            </div>
+        </mat-tab>
+        <mat-tab label="Customer Info">
+            <div mat-dialog-content>
+                <table class="table-content" *ngIf="!noCustDetails">
+
+                    <tr>
+                        <th fxFlex>Customer Name</th>
+                        <td fxFlex>{{res?.response.repairOrderDtls[0].policyHolderName}}</td>
+                    </tr>
+                    <tr>
+                        <th fxFlex>Mobile Number</th>
+                        <td fxFlex>{{res?.response.customerInfo[0].contactNo}}</td>
+                    </tr>
+                    <tr>
+                        <th fxFlex>Delivery Address</th>
+                        <td fxFlex>{{res?.response.customerInfo[0].addressOne}} {{res?.response.customerInfo[0].addressTwo}}</td>
+                    </tr>
+                    <tr>
+                        <th fxFlex>City</th>
+                        <td fxFlex>{{res?.response.customerInfo[0].city}}</td>
+                    </tr>
+                    <tr>
+                        <th fxFlex>Pincode</th>
+                        <td fxFlex>{{res?.response.customerInfo[0].pinCode}}</td>
+                    </tr>
+                    <tr>
+                        <th fxFlex>Province/State</th>
+                        <td fxFlex>{{res?.response.customerInfo[0].state}}</td>
+                    </tr>
+                    <tr>
+                        <th fxFlex>Country</th>
+                        <td fxFlex>{{res?.response.customerInfo[0].country}}</td>
+                    </tr>
+
+
+                </table>
+
+                <!-- <table class="table-content" *ngIf="noCustDetails">
+
+                        <tr>
+                            <th fxFlex>Customer Name</th>
+                            <td fxFlex>N/A</td>
+                        </tr>
+                        <tr>
+                            <th fxFlex>Mobile Number</th>
+                            <td fxFlex>N/A</td>
+                        </tr>
+                        <tr>
+                            <th fxFlex>Delivery Address</th>
+                            <td fxFlex>N/A</td>
+                        </tr>
+                        <tr>
+                            <th fxFlex>City</th>
+                            <td fxFlex>N/A</td>
+                        </tr>
+                        <tr>
+                            <th fxFlex>Pincode</th>
+                            <td fxFlex>N/A</td>
+                        </tr>
+                        <tr>
+                            <th fxFlex>Province/State</th>
+                            <td fxFlex>N/A</td>
+                        </tr>
+                        <tr>
+                            <th fxFlex>Country</th>
+                            <td fxFlex>N/A</td>
+                        </tr>
+    
+    
+                    </table> -->
+            </div>
+            <div mat-dialog-actions>
+                <button mat-raised-button (click)="onNoClick()">Close</button>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

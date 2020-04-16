@@ -1,0 +1,100 @@
+<div class="dialog">
+    <h1 mat-dialog-title>Dispatch Details</h1>
+
+    <div mat-dialog-content>
+        <table class="table-content">
+        </table>
+        <div fxLayout="column">
+            <div fxFlex>
+                <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="15px" fxLayoutGap.xs="0px">
+                    <mat-form-field fxFlex>
+                        <input matInput placeholder="AWB Number" [(ngModel)]="AWBNumber">
+                    </mat-form-field>
+                    <mat-form-field fxFlex>
+                        <mat-select placeholder="Courier Company" [(ngModel)]="courierCompanyValue">
+                            <mat-option *ngFor="let item of response" [value]="item.name">{{item.name}}</mat-option>
+                            <mat-option value="10">ARC</mat-option>
+                            <mat-option value="Self Pickup">Customer Self Pickup</mat-option>
+                            <mat-option value="Self Deliver">Customer Self Deliver</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                </div>
+                <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="15px" fxLayoutGap.xs="0px">
+                    <mat-form-field fxFlex>
+                        <input matInput [owlDateTimeTrigger]="dt" [owlDateTime]="dt" placeholder="Dispatched Date/Time" [(ngModel)]="dispatchDate" [max]="deliveryDate" [readonly]="true">
+                        <owl-date-time #dt></owl-date-time>
+                        <!-- <input matInput [matDatepicker]="dispatchedDatePicker" [max]="deliveryDate" (click)="dispatchedDatePicker.open()" [readonly]="true"
+                            placeholder="Dispatched Date/Time" [(ngModel)]="dispatchDate">
+                        <mat-datepicker-toggle matSuffix [for]="dispatchedDatePicker"></mat-datepicker-toggle>
+                        <mat-datepicker touchUi="true" #dispatchedDatePicker></mat-datepicker> -->
+                    </mat-form-field>
+                    <div fxFlex>
+                        <mat-form-field class="example-full-width">
+                                <input matInput [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1"  [min]="dispatchDate" placeholder="Expected Delivery Date/Time" [readonly]="true" [(ngModel)]="deliveryDate">
+                                <owl-date-time #dt1></owl-date-time>
+                            <!-- <input matInput [matDatepicker]="picker" [min]="dispatchDate" placeholder="Delivery Date/Time" [readonly]="true" [(ngModel)]="deliveryDate">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi="true" #picker></mat-datepicker> -->
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div fxFlex class="fontSizeBrows" *ngIf="courierCompanyValue=='Self Pickup' || courierCompanyValue=='Self Deliver'">
+                <span class="placeholderAddress">POD File</span>
+                <input class="m-t-15" type="file" ngFileSelect [(ngModel)]="PODFile" [options]="options" (uploadOutput)="onUploadOutput($event)"
+                    [uploadInput]="uploadInput" accept="image/*" multiple>
+            </div>
+
+            <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="15px" fxLayoutGap.xs="0px">
+                <mat-form-field fxFlex class="fontSizeBrows">
+                    <span class="placeholderAddress">Dispatch Address</span>
+                    <input class="m-t-15" readonly matInput value="{{customerInfoRes[0]?.addressOne}} {{customerInfoRes[0]?.addressTwo}}">
+                </mat-form-field>
+                <mat-form-field fxFlex class="fontSizeBrows">
+                    <span class="placeholderAddress">City</span>
+                    <input class="m-t-15" readonly matInput value="{{customerInfoRes[0]?.city}}">
+                </mat-form-field>
+
+            </div>
+            <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="15px" fxLayoutGap.xs="0px">
+                <mat-form-field fxFlex class="fontSizeBrows">
+                    <span class="placeholderAddress">Province/State</span>
+                    <input class="m-t-15" readonly matInput value="{{customerInfoRes[0]?.state}}">
+                </mat-form-field>
+                <mat-form-field fxFlex class="fontSizeBrows">
+                    <span class="placeholderAddress">Pincode</span>
+                    <input class="m-t-15" readonly matInput value="{{customerInfoRes[0]?.pinCode}}">
+                </mat-form-field>
+
+            </div>
+            <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="15px" fxLayoutGap.xs="0px">
+
+                <mat-form-field fxFlex class="fontSizeBrows">
+                    <span class="placeholderAddress">Country</span>
+                    <input class="m-t-15" readonly matInput value="{{customerInfoRes[0]?.country}}">
+                </mat-form-field>
+            </div>
+            <mat-form-field fxFlex>
+                <textarea matInput placeholder="Comments" [(ngModel)]="comments"></textarea>
+            </mat-form-field>
+
+        </div>
+    </div>
+    <div mat-dialog-actions>
+
+        <button mat-raised-button id="cancelButton" (click)="onNoClick()">Cancel</button>
+        <button mat-raised-button color="accent" *ngIf="courierCompanyValue=='Self Pickup' || courierCompanyValue=='Self Deliver'"
+            (click)="startUpload()" [disabled]="!courierCompanyValue || disableSubmit()" cdkFocusInitial>Submit</button>
+        <button mat-raised-button color="accent" *ngIf="courierCompanyValue=='AmTrust'" (click)="submitDispatch()" [disabled]="!courierCompanyValue || disableSubmit()"
+            cdkFocusInitial>Submit</button>
+        <button mat-raised-button color="accent" *ngIf="courierCompanyValue!='AmTrust' && courierCompanyValue!='Self Pickup' && courierCompanyValue!='Self Deliver'"
+            (click)="submitDispatchForOthers()" [disabled]="!courierCompanyValue || disableSubmit()" cdkFocusInitial>Submit</button>
+    </div>
+
+
+</div>
+<div class="loading" *ngIf="isLoading" >
+    <mat-spinner [diameter]="40" class="loader" id="myLoader" accent></mat-spinner>
+</div>

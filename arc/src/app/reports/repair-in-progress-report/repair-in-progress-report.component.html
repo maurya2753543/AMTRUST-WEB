@@ -1,0 +1,84 @@
+<!--Header Component-->
+<app-header></app-header>
+<button class="drawer-menu" mat-icon-button (click)="drawer.toggle()" fxShow fxHide.xs="false" fxHide.lg="true" fxHide.xl="true">
+  <mat-icon aria-label="">{{drawer.opened ? 'keyboard_backspace' : 'menu'}}</mat-icon>
+</button>
+<mat-drawer-container>
+    <mat-drawer #drawer mode="push">
+        <!--Menu Component-->
+        <app-menu></app-menu>
+    </mat-drawer>
+    <div fxLayout="row" fxLayoutGap="15px">
+        <div fxFlex="200px" fxHide fxShow.xs="false" fxShow.lg="true" fxShow.xl="true">
+            <!--Menu Component-->
+            <app-menu></app-menu>
+        </div>
+        <div fxFlex>
+            <div class="container">
+                <div class="dashboard-wrap">
+                    <div class="grid">
+                        <mat-card class="data-card">
+                            <mat-card-header class="with-icon">
+                                <div class="handle-drag-report">
+                                    <div class="handle">Drag</div>
+                                    <i class="material-icons">apps</i>
+                                </div>
+                                <div class="report-header">
+                                    <h1 style="width: 90%; float: left;">Repair In Progress Report</h1>
+                                    <button mat-icon-button (click)="downloadData()" color="accent" class="align-right download-btn" style="position: relative;" title="Export">
+                      <i class="fas fa-download"></i>
+                    </button>
+                                </div>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <div class="loading-center" id="loader">
+                                    <mat-spinner *ngIf="!isTableData" [diameter]="40" class="loader" accent></mat-spinner>
+                                </div>
+                                <div mat-dialog-content>
+                                    <table id="myTable" datatable [dtOptions]="dtOptions" class="row-border hover" *ngIf="isTableData" style="padding-top: 20px;">
+                                        <thead style="background: rgba(0,0,0,.12);">
+                                            <tr>
+                                                <th class="align-left">Brand Name</th>
+                                                <th class="align-center">IMEI No.</th>
+                                                <th class="align-center">Estimation Approved on</th>
+                                                <th class="align-center">Repair Due Date/Time</th>
+                                                <th class="align-center">Planned Date/Time</th>
+                                                <th class="align-center" style="width: 100px;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of repairInProgressRes?.response.roList">
+                                                <!-- <td class="align-left">{{item?.brand}} {{item?.model}}</td> -->
+
+                                                <td class="align-left">
+                                                    <span *ngIf="item.logisticsPartner=='captive'" style="margin-right: 2px;">
+                                                <i class="fa fa-motorcycle" aria-hidden="true"></i>
+                                            </span>
+                                                    <span *ngIf="item.logisticsPartner=='logicloud' || item.logisticsPartner=='logicloud_ams'" style="margin-right: 2px;">
+                                                <i class="fa fa-truck" aria-hidden="true"></i>
+                                            </span> {{item?.brand}} {{item?.model}}
+
+                                                </td>
+                                                <td>
+                                                    <button mat-button class="btn" color="primary" (click)="getRepairOrderDetails(item.orderId)">{{item?.imeiNo}}</button>
+                                                </td>
+                                                <td class="align-left">{{item?.estimationApprovedDate | dateFormatWt}}</td>
+                                                <td class="align-left">{{item?.repairDueDate | dateFormatWt}}</td>
+                                                <td class="align-left">{{item?.repairPlannedDate | dateFormatWt}}</td>
+                                                <td class="align-left">
+                                                    <button mat-raised-button color="accent" (click)="done(item.orderId)" class="mb-10">Repair Complete</button>
+                                                    <button mat-raised-button color="accent" (click)="reEstimation(item)" class="mb-10 btn-resize">Re-Estimation</button>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-drawer-container>

@@ -1,0 +1,61 @@
+<mat-card class="data-card" [style.display]="show ? 'block': 'none'">
+    <mat-card-header class="with-icon">
+        <div class="handle-drag">
+            <div class="handle">Drag</div>
+            <i class="material-icons">apps</i>
+        </div>
+        Device In Transit
+        <span class="number-icon" *ngIf="!isToggle">{{deviceResponse?.length}}</span>
+
+        <div class="header-icon-btn">
+            <button mat-icon-button (click)="toggle()">
+                <i class="material-icons">{{isToggle ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
+            </button>
+        </div>
+    </mat-card-header>
+    <mat-card-content *ngIf="isToggle" [@isToggle]="isToggle">
+        <div class="loading-center">
+            <mat-spinner *ngIf="!isDIT" [diameter]="40" class="loader" accent></mat-spinner>
+        </div>
+        <table matSort class="data-table fixed" (matSortChange)="sortData($event)">
+            <thead>
+                <tr>
+                    <th class="align-left">Brand Name</th>
+                    <th class="align-left">Model Name</th>
+                    <th class="align-left">IMEI No.</th>
+                    <th class="align-left" mat-sort-header="eta">ETA</th>
+                    <th class="align-left">AWB No.</th>
+                    <th class="align-left">LSP Current Status</th>
+                </tr>
+            </thead>
+            <!-- logisticsPartner=="logicloud" -->
+            <tbody>
+                <tr *ngFor="let item of deviceResponse">
+
+                    <td class="align-left">
+                        <span *ngIf="item.logisticsPartner=='captive'" style="margin-right: 2px;">
+                            <i class="fa fa-motorcycle" aria-hidden="true"></i>
+                        </span>
+                        <span *ngIf="item.logisticsPartner=='logicloud' || item.logisticsPartner=='logicloud_ams'" style="margin-right: 2px;">
+                            <i class="fa fa-truck" aria-hidden="true"></i>
+                        </span> {{item?.brand}}
+                    </td>
+
+                    <td class="align-left"> {{item?.model}}</td>
+                    <td>
+                        <button mat-button class="btn css-ellipsis" color="primary" (click)="getRepairOrderDetails(item.orderId)" title="{{item?.imeiNo}}">{{item?.imeiNo}}</button>
+                    </td>
+                    <td class="align-left">{{item?.eta | dateFormatWt}}</td>
+                    <td class="align-left" *ngIf="item.logisticsPartner!='captive'">
+                        <a style="cursor: pointer;" (click)="trackAWB(item)">{{item?.awbNo}}</a>
+                    </td>
+                    <td class="align-left" *ngIf="item.logisticsPartner=='captive'">{{item?.awbNo}} </td>
+                    <td class="align-left lsp-status-hover css-ellipsis" >{{item?.message}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </mat-card-content>
+</mat-card>
+<div class="loading" *ngIf="isLoading" >
+    <mat-spinner [diameter]="40" class="loader" id="myLoader" accent></mat-spinner>
+</div>
